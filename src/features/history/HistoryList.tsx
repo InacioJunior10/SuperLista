@@ -25,7 +25,6 @@ export function HistoryList({ getRepo, refreshToken = 0 }: HistoryListProps) {
   const [detail, setDetail] = useState<Purchase | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const [bars, setBars] = useState<ChartBar[]>([]);
-  const [unit, setUnit] = useState<string>("un");
 
   const load = useCallback(async () => {
     try {
@@ -79,7 +78,6 @@ export function HistoryList({ getRepo, refreshToken = 0 }: HistoryListProps) {
     try {
       const points = await (await getRepo()).priceHistory(name);
       setBars(buildPriceChart(points));
-      setUnit(points[points.length - 1]?.unit ?? "un");
     } catch {
       setError(true);
     }
@@ -171,7 +169,7 @@ export function HistoryList({ getRepo, refreshToken = 0 }: HistoryListProps) {
                     <View style={styles.bars}>
                       {bars.map((b, idx) => (
                         <View key={idx} style={styles.barCol}>
-                          <Text style={styles.barValue}>{`${b.valueLabel.replace(`/${unit}`, "")}/${unit}`}</Text>
+                          <Text style={styles.barValue}>{`${b.valueLabel}`}</Text>
                           <View
                             style={[
                               styles.bar,

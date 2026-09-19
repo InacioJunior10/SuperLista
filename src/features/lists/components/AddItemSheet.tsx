@@ -21,8 +21,20 @@ export type AddItemSheetProps = {
   onSubmit: (input: NewItem) => void;
 };
 
-/** un: inteiro >= 1; kg: "0,8" -> 800 (gramas). */
+const DEFAULT_GRAMS = 100;
+
+/** Quantidade inicial do campo ao escolher a unidade: un 1, kg 1, g 100. */
+const defaultQtyText = (unit: Unit) => (unit === "g" ? String(DEFAULT_GRAMS) : "1");
+
+const UNIT_CHIPS = [
+  { unit: "un", label: "Unidade" },
+  { unit: "kg", label: "Kg" },
+  { unit: "g", label: "Gramas" },
+] as const;
+
+/** un: inteiro >= 1; g: gramas inteiros (padrão 100); kg: "0,8" -> 800 (gramas). */
 export function parseQuantity(text: string, unit: Unit): number {
+  if (unit === "g") return Math.max(1, parseInt(text.replace(/\D/g, ""), 10) || DEFAULT_GRAMS);
   if (unit === "un") return Math.max(1, parseInt(text.replace(/\D/g, ""), 10) || 1);
   const kg = parseFloat(text.replace(",", "."));
   return Number.isFinite(kg) && kg > 0 ? Math.max(1, Math.round(kg * 1000)) : 1000;
@@ -55,7 +67,7 @@ function Form({ item, onClose, onSubmit }: Omit<AddItemSheetProps, "visible">) {
     setName(found.name);
     setCategory(CATEGORIES.some((c) => c.key === found.category) ? (found.category as Category) : "outros");
     setUnit(found.unit);
-    setQty("1");
+    setQty(defaultQtyText(found.unit));
     setTouched(true);
   };
 
@@ -112,21 +124,21 @@ function Form({ item, onClose, onSubmit }: Omit<AddItemSheetProps, "visible">) {
       </View>
       <Text style={styles.label}>Unidade</Text>
       <View style={styles.row}>
-        {(["un", "kg"] as const).map((u) => (
+        {UNIT_CHIPS.map((c) => (
           <Chip
-            key={u}
-            label={u}
-            active={unit === u}
-            accessibilityLabel={`Unidade ${u}`}
+            key={c.unit}
+            label={c.label}
+            active={unit === c.unit}
+            accessibilityLabel={`Unidade ${c.unit}`}
             onPress={() => {
-              if (u === unit) return;
-              setUnit(u);
-              setQty("1");
+              if (c.unit === unit) return;
+              setUnit(c.unit);
+              setQty(defaultQtyText(c.unit));
             }}
           />
         ))}
       </View>
-      <Text style={styles.label}>{unit === "kg" ? "Quantidade (kg)" : "Quantidade"}</Text>
+      <Text style={styles.label}>{unit === "kg" ? "Quantidade (kg)" : unit === "g" ? "Quantidade (g)" : "Quantidade"}</Text>
       <TextInput
         value={qty}
         onChangeText={setQty}

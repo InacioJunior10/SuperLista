@@ -48,4 +48,33 @@ describe("migrações", () => {
     expect(items[1]).toMatchObject({ name: "Leite", quantity: 2, unit_price_cents: 550 });
     db.close();
   });
+
+  it("upgrade v4 -> v5 preserva dados e passa a aceitar unidade g", async () => {
+    const db = createTestDb();
+    expect(await migrate(db, MIGRATIONS.slice(0, 4))).toBe(4);
+    await db.runAsync("INSERT INTO lists (id, title, created_at) VALUES (?, ?, ?)", ["l1", "Feira", "2026-01-01T00:00:00Z"]);
+    await db.runAsync(
+      "INSERT INTO items (id, list_id, name, category, unit, quantity, unit_price_cents, checked, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      ["i1", "l1", "Tomate", "hortifruti", "kg", 800, 1025, 1, 0],
+    );
+    await db.runAsync("INSERT INTO products (ean, name, category, unit, updated_at) VALUES (?, ?, ?, ?, ?)", [
+      "789", "Leite", "laticinios", "un", "2026-01-01T00:00:00Z",
+    ]);
+    await expect(
+      db.runAsync("INSERT INTO items (id, list_id, name, unit) VALUES ('x', 'l1', 'Presunto', 'g')"),
+    ).rejects.toThrow();
+
+    expect(await migrate(db)).toBe(5);
+
+    const items = await db.getAllAsync<{ name: string; quantity: number; unit_price_cents: number; checked: number }>(
+      "SELECT * FROM items",
+    );
+    expect(items).toEqual([expect.objectContaining({ name: "Tomate", quantity: 800, unit_price_cents: 1025, checked: 1 })]);
+    expect(await db.getAllAsync("SELECT * FROM products")).toHaveLength(1);
+    await db.runAsync("INSERT INTO items (id, list_id, name, unit, quantity) VALUES ('y', 'l1', 'Presunto', 'g', 400)");
+    await db.runAsync("INSERT INTO products (ean, name, unit, updated_at) VALUES ('1', 'Frios', 'g', 'x')");
+    const idx = await db.getFirstAsync<{ name: string }>("SELECT name FROM sqlite_master WHERE name = 'idx_items_list'");
+    expect(idx).not.toBeNull();
+    db.close();
+  });
 });

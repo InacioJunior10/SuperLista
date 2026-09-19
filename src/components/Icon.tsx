@@ -14,6 +14,7 @@ export const iconMap = {
   laticinios: "cheese",
   padaria: "bread-slice-outline",
   carnes: "food-steak",
+  mercearia: "basket-outline",
   limpeza: "spray-bottle",
   outros: "dots-horizontal",
   editar: "pencil-outline",

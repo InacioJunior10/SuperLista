@@ -79,6 +79,41 @@ export const MIGRATIONS: readonly Migration[] = [
       );
     `,
   },
+  {
+    // Unidade "g": o SQLite não altera CHECK; recria items e products aceitando ('kg', 'un', 'g').
+    // purchase_items.unit não tem CHECK.
+    version: 5,
+    sql: `
+      CREATE TABLE items_new (
+        id               TEXT PRIMARY KEY NOT NULL,
+        list_id          TEXT NOT NULL REFERENCES lists(id) ON DELETE CASCADE,
+        name             TEXT NOT NULL,
+        category         TEXT NOT NULL DEFAULT 'outros',
+        unit             TEXT NOT NULL DEFAULT 'un' CHECK (unit IN ('kg', 'un', 'g')),
+        quantity         INTEGER NOT NULL DEFAULT 1 CHECK (quantity >= 0),
+        unit_price_cents INTEGER CHECK (unit_price_cents IS NULL OR unit_price_cents >= 0),
+        checked          INTEGER NOT NULL DEFAULT 0 CHECK (checked IN (0, 1)),
+        position         INTEGER NOT NULL DEFAULT 0
+      );
+      INSERT INTO items_new (id, list_id, name, category, unit, quantity, unit_price_cents, checked, position)
+        SELECT id, list_id, name, category, unit, quantity, unit_price_cents, checked, position FROM items;
+      DROP TABLE items;
+      ALTER TABLE items_new RENAME TO items;
+      CREATE INDEX idx_items_list ON items(list_id, position);
+
+      CREATE TABLE products_new (
+        ean        TEXT PRIMARY KEY NOT NULL,
+        name       TEXT NOT NULL,
+        category   TEXT NOT NULL DEFAULT 'outros',
+        unit       TEXT NOT NULL DEFAULT 'un' CHECK (unit IN ('kg', 'un', 'g')),
+        updated_at TEXT NOT NULL
+      );
+      INSERT INTO products_new (ean, name, category, unit, updated_at)
+        SELECT ean, name, category, unit, updated_at FROM products;
+      DROP TABLE products;
+      ALTER TABLE products_new RENAME TO products;
+    `,
+  },
 ];
 
 /** Aplica as migrações pendentes usando PRAGMA user_version. Idempotente. */

@@ -26,10 +26,11 @@ beforeEach(async () => {
 });
 afterEach(() => db.close());
 
-// Total dos itens semeados: 820 (tomate) + 1000 (leite) + 0 (iogurte) + 300 (pão) = 2120
+// Soma de todos os itens semeados: 820 (tomate) + 1000 (leite) + 0 (iogurte) + 300 (pão) = 2120.
+// O total do topo só conta os itens pegos; com `pego: true` todos já vêm marcados.
 const SEED_TOTAL = 2120;
 
-async function seed(budgetCents?: number) {
+async function seed(budgetCents?: number, pego = false) {
   const list = await repo.createList({
     title: "Compras do mês",
     market: "Pão de Açúcar",
@@ -41,6 +42,7 @@ async function seed(budgetCents?: number) {
     unit: "kg",
     quantity: 800,
     unitPriceCents: 1025,
+    checked: pego,
   });
   await repo.addItem(list.id, {
     name: "Leite",
@@ -48,12 +50,14 @@ async function seed(budgetCents?: number) {
     unit: "un",
     quantity: 2,
     unitPriceCents: 500,
+    checked: pego,
   });
   const iogurte = await repo.addItem(list.id, {
     name: "Iogurte",
     category: "laticinios",
     unit: "un",
     quantity: 2,
+    checked: pego,
   });
   await repo.addItem(list.id, {
     name: "Pão",
@@ -61,6 +65,7 @@ async function seed(budgetCents?: number) {
     unit: "un",
     quantity: 1,
     unitPriceCents: 300,
+    checked: pego,
   });
   return { list, tomate, iogurte };
 }
@@ -107,16 +112,19 @@ describe("Tela Lista de Compras", () => {
     expect(screen.queryByRole("button", { name: "Carnes" })).toBeNull();
   });
 
-  it("total do hero soma todos os itens; marcar só muda a contagem", async () => {
+  it("total do hero soma só os pegos; marcar e desmarcar recalcula", async () => {
     await seed();
     await renderScreen();
-    expect(screen.getByText(formatBRL(SEED_TOTAL))).toBeTruthy();
+    expect(screen.getByText(formatBRL(0))).toBeTruthy();
     expect(screen.getByText("0 de 4 pegos")).toBeTruthy();
-    await userEvent
-      .setup()
-      .press(screen.getByRole("checkbox", { name: "Marcar Tomate como pego no carrinho" }));
+    const user = userEvent.setup();
+    await user.press(screen.getByRole("checkbox", { name: "Marcar Tomate como pego no carrinho" }));
     expect(await screen.findByText("1 de 4 pegos")).toBeTruthy();
-    expect(screen.getByText(formatBRL(SEED_TOTAL))).toBeTruthy();
+    expect(screen.getAllByText(formatBRL(820))).toHaveLength(2); // badge do item + hero
+    await user.press(screen.getByRole("checkbox", { name: "Marcar Leite como pego no carrinho" }));
+    expect(await screen.findByText(formatBRL(1820))).toBeTruthy();
+    await user.press(screen.getByRole("checkbox", { name: /Tomate/ }));
+    expect(await screen.findAllByText(formatBRL(1000))).toHaveLength(2); // badge do Leite + hero
     expect(router.push).not.toHaveBeenCalled();
   });
 
@@ -138,15 +146,16 @@ describe("Tela Lista de Compras", () => {
 
   it("atualiza o total em tempo real quando o preço muda", async () => {
     const { iogurte } = await seed();
+    await repo.updateItem(iogurte.id, { checked: true });
     let setPrice: (id: string, cents: number) => Promise<void> = async () => undefined;
     function Probe() {
       setPrice = useShoppingList().setItemPrice;
       return null;
     }
     await renderScreen(<Probe />);
-    expect(screen.getByText(formatBRL(SEED_TOTAL))).toBeTruthy();
+    expect(screen.getByText(formatBRL(0))).toBeTruthy();
     await act(() => setPrice(iogurte.id, 250));
-    expect(await screen.findByText(formatBRL(SEED_TOTAL + 500))).toBeTruthy();
+    expect(await screen.findAllByText(formatBRL(500))).toHaveLength(2); // badge do iogurte + hero
     expect(screen.queryByText("Definir preço")).toBeNull();
   });
 
@@ -179,14 +188,14 @@ describe("Tela Lista de Compras", () => {
   });
 
   it("aviso a partir de 80% da meta", async () => {
-    await seed(2500);
+    await seed(2500, true);
     await renderScreen();
     expect(screen.getByRole("alert")).toBeTruthy();
     expect(screen.getByText(/Atenção/)).toBeTruthy();
   });
 
   it("aviso de meta ultrapassada", async () => {
-    await seed(1000);
+    await seed(1000, true);
     await renderScreen();
     expect(screen.getByText(`Meta ultrapassada em ${formatBRL(SEED_TOTAL - 1000)}`)).toBeTruthy();
   });
@@ -237,11 +246,12 @@ describe("Tela Lista de Compras", () => {
         name: `Item ${i}`,
         category: i % 2 ? "carnes" : "limpeza",
         unitPriceCents: 100,
+        checked: i < 150,
       });
     }
     await renderScreen();
-    expect(screen.getByText("0 de 200 pegos")).toBeTruthy();
-    expect(screen.getByText(formatBRL(20000))).toBeTruthy();
+    expect(screen.getByText("150 de 200 pegos")).toBeTruthy();
+    expect(screen.getByText(formatBRL(15000))).toBeTruthy();
     expect(screen.getByText("Item 1")).toBeTruthy();
   });
 });

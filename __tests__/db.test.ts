@@ -140,7 +140,7 @@ describe("seedIfEmpty", () => {
     expect(await seedIfEmpty(repo)).toBe(false);
     const lists = await repo.listLists();
     expect(lists).toHaveLength(1);
-    expect(lists[0].items).toHaveLength(12);
-    expect(lists[0].budgetCents).toBe(20000);
+    expect(lists[0].items).toHaveLength(41);
+    expect(lists[0].budgetCents).toBeUndefined();
   });
 });

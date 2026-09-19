@@ -14,6 +14,11 @@ describe("format", () => {
     expect(formatItemDetail({ unit: "kg", quantity: 800, unitPriceCents: 0 })).toBe("0,800 kg");
   });
 
+  it("detalhe g: gramas, preço por kg", () => {
+    expect(formatItemDetail({ unit: "g", quantity: 500, unitPriceCents: 4290 })).toBe("500 g × R$ 42,90/kg");
+    expect(formatItemDetail({ unit: "g", quantity: 500, unitPriceCents: 0 })).toBe("500 g");
+  });
+
   it("detalhe un com e sem preço", () => {
     expect(formatItemDetail({ unit: "un", quantity: 2, unitPriceCents: 0 })).toBe("2 un");
     expect(formatItemDetail({ unit: "un", quantity: 2, unitPriceCents: 499 })).toBe(

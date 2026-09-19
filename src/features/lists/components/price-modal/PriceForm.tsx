@@ -5,7 +5,7 @@ import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 
 import { Button, Checkbox, Chip, Icon, MoneyText } from "@/components";
 import { colors, hitTarget, radius, spacing, typography } from "@/theme";
 import type { ShoppingItem } from "@/types/list";
-import { formatWeightKg } from "@/utils/format";
+import { formatWeightG, formatWeightKg } from "@/utils/format";
 import { formatBRL, parseCents } from "@/utils/money";
 
 import { getCategoryInfo } from "../../categories";
@@ -25,13 +25,14 @@ export function PriceForm({ item, onSave }: PriceFormProps) {
   const [quantity, setQuantity] = useState(item.quantity);
   const [checked, setChecked] = useState(item.checked);
 
-  const isKg = item.unit === "kg";
+  const isWeight = item.unit !== "un";
   const dirty =
     priceCents !== item.unitPriceCents || quantity !== item.quantity || checked !== item.checked;
   const total = itemTotalCents({ ...item, unitPriceCents: priceCents, quantity });
   const unitPrice = formatBRL(priceCents);
-  const formula = isKg
-    ? `Pesagem: ${formatWeightKg(quantity)} × ${unitPrice}/kg`
+  const weightText = item.unit === "g" ? formatWeightG(quantity) : formatWeightKg(quantity);
+  const formula = isWeight
+    ? `Pesagem: ${weightText} × ${unitPrice}/kg`
     : `${quantity} un × ${unitPrice}`;
 
   const exit = () => {
@@ -73,7 +74,7 @@ export function PriceForm({ item, onSave }: PriceFormProps) {
           <Text style={styles.formula}>{formula}</Text>
         </View>
 
-        <Text style={styles.sectionLabel}>{isKg ? "Preço por kg" : "Preço por unidade"}</Text>
+        <Text style={styles.sectionLabel}>{isWeight ? "Preço por kg" : "Preço por unidade"}</Text>
         <TextInput
           value={unitPrice}
           onChangeText={(t) => setPriceCents(Math.min(parseCents(t), MAX_CENTS))}
@@ -100,7 +101,7 @@ export function PriceForm({ item, onSave }: PriceFormProps) {
           <View style={styles.headerText}>
             <Text style={styles.name}>Quantidade / Peso</Text>
             <Text style={styles.hint}>
-              {isKg ? `Bandeja com ${quantity} gramas` : "Quantidade em unidades"}
+              {isWeight ? `Bandeja com ${quantity} gramas` : "Quantidade em unidades"}
             </Text>
           </View>
           <WeightStepper unit={item.unit} value={quantity} onChange={setQuantity} />
@@ -114,7 +115,7 @@ export function PriceForm({ item, onSave }: PriceFormProps) {
           />
           <View style={styles.headerText}>
             <Text style={styles.name}>Marcar como pego no carrinho</Text>
-            <Text style={styles.hint}>Soma direto ao total estimado da compra</Text>
+            <Text style={styles.hint}>Soma ao total do carrinho</Text>
           </View>
         </View>
       </ScrollView>

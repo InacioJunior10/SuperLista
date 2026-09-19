@@ -62,7 +62,9 @@ Cada fase é **uma branch + uma worktree** e termina com `.\scripts\check.ps1` v
 | **Somente app mobile** (Android/iOS); sem versão web | 2026-09-19 | Removidos script `web` e config web; nada de Metro/wasm para SQLite |
 | **Todos os dados no dispositivo** (SQLite); **sem API, backend ou nuvem** por enquanto | 2026-09-19 | NFR "sincronização em segundo plano" adiado (fora do escopo da v1.0); sem chamadas de rede; sem contas/login |
 
-| **Total do topo = soma de todos os itens da lista** (`estimatedTotalCents`), marcados ou não; a meta é comparada com esse total | 2026-09-19 | `budgetStatus` já usa esse total; `cartTotalCents` (só marcados) fica para o checkout |
+| **Total do topo = soma só dos itens marcados "Pego"** (`cartTotalCents`); a meta é comparada com esse total. Substitui a regra anterior "soma de todos os itens" (`estimatedTotalCents` segue exportado) | 2026-09-19 | `budgetStatus` usa `cartTotalCents`; o provider expõe também `pendingCount` |
+| **Nova unidade `g` (Gramas)**: `quantity` em gramas e preço por kg (mesma fórmula do kg); só a exibição muda ("500 g × R$ 42,90/kg"). Nova categoria "Mercearia & Grãos" | 2026-09-19 | Migração v5 recria `items`/`products` com CHECK incluindo `g` |
+| **Lista inicial em todas as builds**: banco vazio => "Lista de compras" com 41 itens, preços 0, desmarcados, sem mercado/meta | 2026-09-19 | Substitui o seed de exemplo (só `__DEV__`); itens g/kg sem peso explícito usam 100 g (editável) |
 | **Todo item tem preço, padrão 0** (`unitPriceCents: number`, nunca ausente); item com 0 mostra "Definir preço" | 2026-09-19 | Migração v2 converte NULL em 0; tocar no item abre o modal de preço e **Salvar Preço** atualiza o topo |
 
 | **É uma POC: sempre o caminho mais rápido e simples** (sem sobre-engenharia, sem features opcionais do plano) | 2026-09-19 | Itens marcados "opcional"/"decisão em aberto" dos arquivos de fase ficam fora; sem novas dependências salvo as estritamente necessárias |

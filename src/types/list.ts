@@ -4,21 +4,23 @@ export type Category =
   | "laticinios"
   | "padaria"
   | "carnes"
+  | "mercearia"
   | "limpeza"
   | "outros";
 
-export type Unit = "kg" | "un";
+/** kg e g guardam gramas em `quantity` e preço POR KG; g apenas exibe a quantidade em gramas. */
+export type Unit = "kg" | "un" | "g";
 
 export type ShoppingItem = {
   id: string;
   name: string;
   category: Category;
   unit: Unit;
-  /** un: quantidade de unidades; kg: peso em gramas */
+  /** un: quantidade de unidades; kg e g: peso em gramas */
   quantity: number;
-  /** Preço unitário (por un) ou por kg, em centavos. Padrão 0 (= "Definir preço" na UI); nunca ausente. */
+  /** Preço unitário (por un) ou por kg (kg e g), em centavos. Padrão 0 (= "Definir preço" na UI); nunca ausente. */
   unitPriceCents: number;
-  /** "Pego no carrinho": só marca o item (contagem "N de M pegos"); não altera o total do topo */
+  /** "Pego no carrinho": só os itens marcados entram no total do topo e na comparação com a meta */
   checked: boolean;
 };
 
