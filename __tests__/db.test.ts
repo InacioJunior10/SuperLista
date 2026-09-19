@@ -26,10 +26,16 @@ describe("migrate", () => {
     await migrate(legacy, MIGRATIONS.slice(0, 1));
     await legacy.runAsync("INSERT INTO lists (id, title, created_at) VALUES ('l', 'L', 'x')");
     await legacy.runAsync("INSERT INTO items (id, list_id, name) VALUES ('i', 'l', 'Arroz')");
-    expect((await legacy.getFirstAsync<{ p: number | null }>("SELECT unit_price_cents AS p FROM items"))?.p).toBeNull();
+    expect(
+      (await legacy.getFirstAsync<{ p: number | null }>("SELECT unit_price_cents AS p FROM items"))
+        ?.p,
+    ).toBeNull();
 
     await migrate(legacy);
-    expect((await legacy.getFirstAsync<{ p: number | null }>("SELECT unit_price_cents AS p FROM items"))?.p).toBe(0);
+    expect(
+      (await legacy.getFirstAsync<{ p: number | null }>("SELECT unit_price_cents AS p FROM items"))
+        ?.p,
+    ).toBe(0);
     legacy.close();
   });
 
@@ -39,7 +45,10 @@ describe("migrate", () => {
   });
 
   it("faz rollback se uma migração falhar", async () => {
-    const broken = [...MIGRATIONS, { version: 99, sql: "CREATE TABLE ok (id TEXT); SELECT * FROM inexistente;" }];
+    const broken = [
+      ...MIGRATIONS,
+      { version: 99, sql: "CREATE TABLE ok (id TEXT); SELECT * FROM inexistente;" },
+    ];
     await expect(migrate(db, broken)).rejects.toThrow();
     const row = await db.getFirstAsync<{ user_version: number }>("PRAGMA user_version");
     expect(row?.user_version).toBe(MIGRATIONS[MIGRATIONS.length - 1].version);
@@ -88,7 +97,12 @@ describe("items", () => {
     await repo.addItem(id, { name: "Dois", category: "carnes", unit: "kg", quantity: 800 });
     const list = await repo.getList(id);
     expect(list?.items.map((i) => i.name)).toEqual(["Um", "Dois"]);
-    expect(list?.items[0]).toMatchObject({ category: "outros", unit: "un", quantity: 1, checked: false });
+    expect(list?.items[0]).toMatchObject({
+      category: "outros",
+      unit: "un",
+      quantity: 1,
+      checked: false,
+    });
     expect(list?.items[1]).toMatchObject({ category: "carnes", unit: "kg", quantity: 800 });
   });
 

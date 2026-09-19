@@ -29,7 +29,14 @@ const item = (o: Partial<ShoppingItem> = {}): ShoppingItem => ({
 
 describe("categorias", () => {
   it("ordem do PRD com outros por último", () => {
-    expect(CATEGORIES.map((c) => c.key)).toEqual(["hortifruti", "laticinios", "padaria", "carnes", "limpeza", "outros"]);
+    expect(CATEGORIES.map((c) => c.key)).toEqual([
+      "hortifruti",
+      "laticinios",
+      "padaria",
+      "carnes",
+      "limpeza",
+      "outros",
+    ]);
     expect(CATEGORIES[0].label).toBe("Hortifrúti & Feira");
   });
 });
@@ -97,7 +104,8 @@ describe("agrupamento", () => {
 });
 
 describe("meta", () => {
-  const at = (cents: number) => budgetStatus({ budgetCents: 10000, items: [item({ unitPriceCents: cents })] });
+  const at = (cents: number) =>
+    budgetStatus({ budgetCents: 10000, items: [item({ unitPriceCents: cents })] });
   it("sem meta", () => {
     expect(budgetStatus({ items: [item({ unitPriceCents: 500 })] }).level).toBe("none");
   });

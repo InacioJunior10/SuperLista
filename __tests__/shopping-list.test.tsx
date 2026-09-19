@@ -105,7 +105,10 @@ describe("useShoppingList", () => {
 
   it("reverte e expõe erro quando a persistência falha", async () => {
     const { a } = await seedList();
-    const failing = { ...repo, updateItem: jest.fn().mockRejectedValue(new Error("boom")) } as ListsRepository;
+    const failing = {
+      ...repo,
+      updateItem: jest.fn().mockRejectedValue(new Error("boom")),
+    } as ListsRepository;
     const { result } = await setup(failing);
     await act(() => result.current.toggleItem(a.id));
     expect(result.current.checkedCount).toBe(0);

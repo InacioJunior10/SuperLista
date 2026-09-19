@@ -33,6 +33,7 @@ export default function RootLayout() {
         screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.canvas } }}
       >
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="preco/[itemId]" options={{ presentation: "modal" }} />
       </Stack>
     </DatabaseGate>
   );

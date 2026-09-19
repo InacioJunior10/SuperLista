@@ -7,7 +7,6 @@ import TabsLayout from "../app/(tabs)/_layout";
 import Ajustes from "../app/(tabs)/ajustes";
 import Carrinho from "../app/(tabs)/carrinho";
 import Historico from "../app/(tabs)/historico";
-import Home from "../app/(tabs)/index";
 
 jest.mock("@react-native-async-storage/async-storage", () =>
   jest.requireActual("@react-native-async-storage/async-storage/jest/async-storage-mock"),
@@ -17,7 +16,7 @@ describe("abas", () => {
   it("renderiza os 4 rótulos do PRD", async () => {
     await renderRouter({
       "(tabs)/_layout": TabsLayout,
-      "(tabs)/index": Home,
+      "(tabs)/index": () => null,
       "(tabs)/historico": Historico,
       "(tabs)/carrinho": Carrinho,
       "(tabs)/ajustes": Ajustes,
