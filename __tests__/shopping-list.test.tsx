@@ -38,9 +38,9 @@ async function seedList() {
 }
 
 describe("useShoppingList", () => {
-  it("cria 'Minha lista' quando não há listas", async () => {
+  it("cria a lista inicial quando não há listas", async () => {
     const { result } = await setup();
-    expect(result.current.list?.title).toBe("Minha lista");
+    expect(result.current.list?.title).toBe("Lista de compras");
     expect((await repo.listLists()).length).toBe(1);
   });
 

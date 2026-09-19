@@ -1,9 +1,4 @@
 import type { ListsRepository, NewItem } from "./repository";
-import type { Db } from "./types";
-
-/** Incremente para forçar nova carga da lista inicial (substitui as listas existentes uma vez). */
-export const INITIAL_LIST_REVISION = 1;
-const REVISION_KEY = "initial_list_revision";
 
 // Lista inicial do primeiro uso (banco vazio): preços zerados e nada marcado; o usuário edita.
 // kg e g: quantity em gramas (1 kg = 1000). Itens g/kg sem peso explícito usam 100 g como padrão editável.
@@ -58,29 +53,19 @@ async function createInitialList(repo: ListsRepository): Promise<void> {
   }
 }
 
-/** Cria a lista inicial se ainda não existir nenhuma lista. Retorna true se semeou. */
-export async function seedIfEmpty(repo: ListsRepository): Promise<boolean> {
-  if ((await repo.listLists()).length > 0) return false;
-  await createInitialList(repo);
-  return true;
-}
+let pending: Promise<boolean> | null = null;
 
 /**
- * Sincroniza a lista inicial uma vez por revisão (app_meta.initial_list_revision): ao mudar a
- * revisão, substitui TODAS as listas pela lista inicial exata (purchases/products intactos).
- * Depois disso, edições do usuário são preservadas. Retorna true se sincronizou.
+ * Se já existe QUALQUER lista, não faz nada (retorna false). Se não existe nenhuma, cria a lista
+ * inicial (retorna true). Single-flight: chamadas simultâneas compartilham a mesma criação.
  */
-export async function syncInitialList(db: Db, repo: ListsRepository): Promise<boolean> {
-  const row = await db.getFirstAsync<{ value: string }>("SELECT value FROM app_meta WHERE key = ?", [REVISION_KEY]);
-  if (row?.value === String(INITIAL_LIST_REVISION)) return false;
-
-  await db.withTransactionAsync(async () => {
-    for (const list of await repo.listLists()) await repo.deleteList(list.id);
+export function ensureInitialList(repo: ListsRepository): Promise<boolean> {
+  pending ??= (async () => {
+    if ((await repo.listLists()).length > 0) return false;
     await createInitialList(repo);
-    await db.runAsync("INSERT OR REPLACE INTO app_meta (key, value) VALUES (?, ?)", [
-      REVISION_KEY,
-      String(INITIAL_LIST_REVISION),
-    ]);
+    return true;
+  })().finally(() => {
+    pending = null;
   });
-  return true;
+  return pending;
 }

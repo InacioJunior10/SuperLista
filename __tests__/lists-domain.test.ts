@@ -1,6 +1,6 @@
 import { migrate } from "../src/db/migrations";
 import { createListsRepository } from "../src/db/repository";
-import { seedIfEmpty } from "../src/db/seed";
+import { ensureInitialList } from "../src/db/seed";
 import {
   budgetStatus,
   cartTotalCents,
@@ -138,7 +138,7 @@ describe("lista inicial", () => {
     const db = createTestDb();
     await migrate(db);
     const repo = createListsRepository(db);
-    await seedIfEmpty(repo);
+    await ensureInitialList(repo);
     const list = (await repo.listLists())[0];
     const full = (await repo.getList(list.id))!;
     expect(full.title).toBe("Lista de compras");

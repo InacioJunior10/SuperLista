@@ -1,6 +1,6 @@
 import { migrate, MIGRATIONS } from "../src/db/migrations";
 import { createListsRepository, type ListsRepository } from "../src/db/repository";
-import { seedIfEmpty } from "../src/db/seed";
+import { ensureInitialList } from "../src/db/seed";
 import { createTestDb } from "../test-utils/sqliteTestDb";
 
 let db: ReturnType<typeof createTestDb>;
@@ -134,10 +134,10 @@ describe("items", () => {
   });
 });
 
-describe("seedIfEmpty", () => {
+describe("ensureInitialList", () => {
   it("semeia uma vez e não duplica", async () => {
-    expect(await seedIfEmpty(repo)).toBe(true);
-    expect(await seedIfEmpty(repo)).toBe(false);
+    expect(await ensureInitialList(repo)).toBe(true);
+    expect(await ensureInitialList(repo)).toBe(false);
     const lists = await repo.listLists();
     expect(lists).toHaveLength(1);
     expect(lists[0].items).toHaveLength(41);
