@@ -26,6 +26,12 @@ describe("format", () => {
     );
   });
 
+  it("detalhe pct: singular, plural, com e sem preço", () => {
+    expect(formatItemDetail({ unit: "pct", quantity: 1, unitPriceCents: 0 })).toBe("1 pacote");
+    expect(formatItemDetail({ unit: "pct", quantity: 2, unitPriceCents: 0 })).toBe("2 pacotes");
+    expect(formatItemDetail({ unit: "pct", quantity: 2, unitPriceCents: 499 })).toBe("2 pacotes × R$ 4,99");
+  });
+
   it("subtítulo com e sem mercado", () => {
     expect(formatListSubtitle("Pão de Açúcar")).toBe("Pão de Açúcar • Hoje");
     expect(formatListSubtitle()).toBe("Hoje");

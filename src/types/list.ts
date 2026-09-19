@@ -8,8 +8,8 @@ export type Category =
   | "limpeza"
   | "outros";
 
-/** kg e g guardam gramas em `quantity` e preço POR KG; g apenas exibe a quantidade em gramas. */
-export type Unit = "kg" | "un" | "g";
+/** kg e g guardam gramas em `quantity` e preço POR KG; g apenas exibe a quantidade em gramas. un e pct (pacote): contagem inteira e preço por unidade/pacote. */
+export type Unit = "kg" | "un" | "g" | "pct";
 
 export type ShoppingItem = {
   id: string;

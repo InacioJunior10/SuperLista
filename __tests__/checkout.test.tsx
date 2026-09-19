@@ -95,6 +95,23 @@ describe("migração v3 e repositório de compras", () => {
   });
 });
 
+describe("buildReceipt com pacote", () => {
+  it("total do item pct = quantidade × preço", () => {
+    const pct: ShoppingItem = {
+      id: "p",
+      name: "Arroz",
+      category: "mercearia",
+      unit: "pct",
+      quantity: 3,
+      unitPriceCents: 499,
+      checked: true,
+    };
+    const r = buildReceipt({ items: [pct] });
+    expect(r.totalCents).toBe(1497);
+    expect(r.sections[0].lines[0].totalCents).toBe(1497);
+  });
+});
+
 describe("buildReceipt", () => {
   const item = (id: string, over: Partial<ShoppingItem>): ShoppingItem => ({
     id,

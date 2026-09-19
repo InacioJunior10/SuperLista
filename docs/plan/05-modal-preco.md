@@ -12,7 +12,8 @@
 3. **Visor do valor** "VALOR TOTAL NO PACOTE" (`R$ 8,20`) + linha "Pesagem: 0,800 kg × R$ 10,25/kg".
 4. **Entrada de preço** com máscara BRL (`parseCents`/`formatBRL`): digitar `1025` → `R$ 10,25`; teclado numérico.
 5. **Ajuste rápido**: chips `+R$ 0,50`, `+R$ 1,00`, `+R$ 2,00`, `+R$ 5,00` e `Zerar`.
-6. **Quantidade/peso**: `Stepper` — `un` de 1 em 1; `kg` em passos de 50 g (mostrando "0,8 kg"); `g` também em 50 g, mostrando "500 g", preço "Preço por kg" e fórmula "Pesagem: 500 g × R$ 42,90/kg"; rótulo "Bandeja com 800 gramas".
+0. **Nome do item** editável (TextInput, obrigatório) no topo do formulário, salvo junto com o preço; **Tipo de quantidade** em `Dropdown` (Unidade, Quilo, Gramas, Pacote) com conversão da quantidade (2026-09-19).
+6. **Quantidade/peso**: `Stepper` — `un` e `pct` (Pacote: "Preço por pacote", "Quantidade em pacotes") de 1 em 1; `kg` em passos de 50 g (mostrando "0,8 kg"); `g` também em 50 g, mostrando "500 g", preço "Preço por kg" e fórmula "Pesagem: 500 g × R$ 42,90/kg"; rótulo "Bandeja com 800 gramas".
 7. **Toggle** "Marcar como pego no carrinho" (só itens pegos entram no total do topo).
 8. **Rodapé**: `Sair` (descarta alterações pendentes, com confirmação se houver) e `Salvar Preço` (grava no SQLite, atualiza o item e **atualiza o total do topo da lista**, que é a soma dos itens pegos; fecha o modal).
 9. Alternância `un`/`kg` do item quando fizer sentido (RF-04), atualizando a fórmula exibida.

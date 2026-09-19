@@ -115,7 +115,7 @@ describe("lista inicial exata", () => {
   it("migrar de v5 para v6 preserva dados e cria app_meta", async () => {
     expect(await migrate(db, MIGRATIONS.slice(0, 5))).toBe(5);
     await db.runAsync("INSERT INTO lists (id, title, created_at) VALUES ('l1', 'Feira', 'x')");
-    expect(await migrate(db)).toBe(6);
+    expect(await migrate(db)).toBe(MIGRATIONS[MIGRATIONS.length - 1].version);
     expect(await db.getAllAsync("SELECT id FROM lists")).toHaveLength(1);
     expect(await db.getAllAsync("SELECT key FROM app_meta")).toEqual([]);
   });

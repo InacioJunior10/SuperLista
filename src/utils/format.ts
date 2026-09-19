@@ -14,7 +14,7 @@ export function formatWeightG(grams: number): string {
   return `${grams} g`;
 }
 
-/** Detalhe da linha: "0,800 kg × R$ 10,25/kg", "500 g × R$ 42,90/kg", "2 un × R$ 4,99"; sem preço, só a quantidade. */
+/** Detalhe da linha: "0,800 kg × R$ 10,25/kg", "500 g × R$ 42,90/kg", "2 un × R$ 4,99", "2 pacotes × R$ 4,99"; sem preço, só a quantidade. */
 export function formatItemDetail(
   item: Pick<ShoppingItem, "unit" | "quantity" | "unitPriceCents">,
 ): string {
@@ -23,7 +23,7 @@ export function formatItemDetail(
     const weight = item.unit === "g" ? formatWeightG(item.quantity) : formatWeightKg(item.quantity);
     return hasPrice ? `${weight} × ${formatBRL(item.unitPriceCents)}/kg` : weight;
   }
-  const qty = `${item.quantity} un`;
+  const qty = item.unit === "pct" ? `${item.quantity} ${item.quantity === 1 ? "pacote" : "pacotes"}` : `${item.quantity} un`;
   return hasPrice ? `${qty} × ${formatBRL(item.unitPriceCents)}` : qty;
 }
 

@@ -68,7 +68,7 @@ describe("Modal Informar Preço", () => {
     const { tomate } = await seed();
     await open(tomate.id);
     expect(screen.getByText("Hortifrúti & Feira")).toBeTruthy();
-    expect(screen.getByText("Tomate")).toBeTruthy();
+    expect(screen.getByLabelText("Nome do item").props.value).toBe("Tomate");
     expect(screen.getByText(formatBRL(820))).toBeTruthy();
     expect(screen.getByText("Pesagem: 0,800 kg × R$ 10,25/kg")).toBeTruthy();
     expect(screen.getByText("Bandeja com 800 gramas")).toBeTruthy();
@@ -192,5 +192,120 @@ describe("Modal Informar Preço: unidade g", () => {
     await userEvent.setup().press(screen.getByRole("button", { name: "Aumentar quantidade" }));
     expect(screen.getByText("550 g")).toBeTruthy();
     expect(screen.getByText("Pesagem: 550 g × R$ 42,90/kg")).toBeTruthy();
+  });
+});
+describe("Modal Informar Preço: nome editável", () => {
+  it("mostra o nome atual, edita e salva junto com o preço; o nome novo chega ao provider", async () => {
+    const { leite } = await seed();
+    await open(leite.id);
+    const input = screen.getByLabelText("Nome do item");
+    expect(input.props.value).toBe("Leite");
+    expect(input.props.maxLength).toBe(80);
+    const user = userEvent.setup();
+    await user.clear(input);
+    await user.type(input, "  Leite integral ");
+    await user.press(screen.getByRole("button", { name: "+R$ 5,00" }));
+    await user.press(screen.getByRole("button", { name: "Salvar Preço" }));
+    expect(await repo.getItem(leite.id)).toMatchObject({ name: "Leite integral", unitPriceCents: 500 });
+    expect(router.back).toHaveBeenCalledTimes(1);
+  });
+
+  it("nome vazio desabilita Salvar e mostra a mensagem", async () => {
+    const { leite } = await seed();
+    await open(leite.id);
+    const user = userEvent.setup();
+    await user.clear(screen.getByLabelText("Nome do item"));
+    expect(screen.getByText("Informe o nome do item.")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Salvar Preço" }).props.accessibilityState.disabled).toBe(true);
+    await user.type(screen.getByLabelText("Nome do item"), "   ");
+    expect(screen.getByRole("button", { name: "Salvar Preço" }).props.accessibilityState.disabled).toBe(true);
+  });
+
+  it("só alterar o nome já pede confirmação no Sair", async () => {
+    const { leite } = await seed();
+    const alert = jest.spyOn(Alert, "alert").mockImplementation(() => undefined);
+    await open(leite.id);
+    await userEvent.setup().type(screen.getByLabelText("Nome do item"), "s");
+    await userEvent.setup().press(screen.getByRole("button", { name: "Sair" }));
+    expect(alert).toHaveBeenCalledWith("Descartar alterações?", expect.any(String), expect.any(Array));
+    expect(router.back).not.toHaveBeenCalled();
+  });
+});
+
+describe("Modal Informar Preço: dropdown do tipo de quantidade", () => {
+  const pick = async (user: ReturnType<typeof userEvent.setup>, label: string) => {
+    await user.press(screen.getByRole("button", { name: "Tipo de quantidade" }));
+    await user.press(screen.getByRole("radio", { name: label }));
+  };
+
+  it("abre com as 4 opções e fecha ao selecionar", async () => {
+    const { leite } = await seed();
+    await open(leite.id);
+    const user = userEvent.setup();
+    await user.press(screen.getByRole("button", { name: "Tipo de quantidade" }));
+    expect(screen.getAllByRole("radio").map((r) => r.props.accessibilityLabel)).toEqual([
+      "Unidade",
+      "Quilo (kg)",
+      "Gramas (g)",
+      "Pacote",
+    ]);
+    await user.press(screen.getByRole("radio", { name: "Pacote" }));
+    expect(screen.queryByRole("radio")).toBeNull();
+  });
+
+  it("un -> pct mantém a contagem e troca rótulos e fórmula", async () => {
+    const { leite } = await seed();
+    await open(leite.id);
+    await pick(userEvent.setup(), "Pacote");
+    expect(screen.getByText("Preço por pacote")).toBeTruthy();
+    expect(screen.getByText("Quantidade em pacotes")).toBeTruthy();
+    expect(screen.getByText("2 pacotes × R$ 0,00")).toBeTruthy();
+    expect(screen.getByText("2 pct")).toBeTruthy();
+    await pick(userEvent.setup(), "Unidade");
+    expect(screen.getByText("2 un × R$ 0,00")).toBeTruthy();
+  });
+
+  it("kg -> g mantém gramas; kg -> un vira 1; un -> kg vira 1000", async () => {
+    const { tomate } = await seed();
+    await open(tomate.id);
+    const user = userEvent.setup();
+    await pick(user, "Gramas (g)");
+    expect(screen.getByText("800 g")).toBeTruthy();
+    expect(screen.getByText("Pesagem: 800 g × R$ 10,25/kg")).toBeTruthy();
+    await pick(user, "Unidade");
+    expect(screen.getByText("Preço por unidade")).toBeTruthy();
+    expect(screen.getByText("1 un × R$ 10,25")).toBeTruthy();
+    await pick(user, "Quilo (kg)");
+    expect(screen.getByText("1 kg")).toBeTruthy();
+    expect(screen.getByText("Pesagem: 1,000 kg × R$ 10,25/kg")).toBeTruthy();
+  });
+
+  it("un -> g vira 100 g", async () => {
+    const { leite } = await seed();
+    await open(leite.id);
+    await pick(userEvent.setup(), "Gramas (g)");
+    expect(screen.getByText("100 g")).toBeTruthy();
+  });
+
+  it("Salvar persiste a unidade nova e o total do topo recalcula", async () => {
+    const { tomate } = await seed();
+    await open(tomate.id);
+    expect(total()).toBe(820);
+    const user = userEvent.setup();
+    await pick(user, "Pacote");
+    await user.press(screen.getByRole("button", { name: "Aumentar quantidade" }));
+    await user.press(screen.getByRole("button", { name: "Salvar Preço" }));
+    expect(await repo.getItem(tomate.id)).toMatchObject({ unit: "pct", quantity: 2, unitPriceCents: 1025 });
+    await waitFor(() => expect(total()).toBe(2050));
+  });
+
+  it("trocar só a unidade conta como alteração pendente", async () => {
+    const { leite } = await seed();
+    const alert = jest.spyOn(Alert, "alert").mockImplementation(() => undefined);
+    await open(leite.id);
+    const user = userEvent.setup();
+    await pick(user, "Pacote");
+    await user.press(screen.getByRole("button", { name: "Sair" }));
+    expect(alert).toHaveBeenCalled();
   });
 });
