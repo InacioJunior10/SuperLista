@@ -77,7 +77,13 @@ function Form({ item, onClose, onSubmit }: Omit<AddItemSheetProps, "visible">) {
           accessibilityLabel="Escanear código"
           style={styles.scan}
         >
-          <MaterialCommunityIcons name="barcode-scan" size={24} color={colors.primary} />
+          <MaterialCommunityIcons
+            name="barcode-scan"
+            size={24}
+            color={colors.primary}
+            accessibilityElementsHidden
+            importantForAccessibility="no"
+          />
           <Text style={styles.scanText}>Escanear código</Text>
         </Pressable>
       )}

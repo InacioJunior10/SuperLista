@@ -15,8 +15,14 @@ Cada fase é **uma branch + uma worktree** e termina com `.\scripts\check.ps1` v
 | 4 Tela Lista de Compras | Concluída |
 | 5 Modal Informar Preço | Concluída |
 | 6 Meta e itens | Concluída (sem desfazer via snackbar nem ordenar pendentes: fora da POC) |
+| 7 NFR (offline, desempenho, acessibilidade) | Concluída (POC); medições reais ficam para o teste no emulador |
+| 8.1 Checkout | Concluída |
+| 8.2 Histórico | Concluída |
+| 8.3 Scanner | Concluída (leitura real da câmera ainda não testada) |
 | 8.4 Ajustes | Concluída (sobre o app + limpar dados) |
-| 7, 8.1 a 8.3, 9 | Pendentes — próximas: **8.1 Checkout** e **8.3 Scanner** (paralelas), depois **8.2 Histórico**, **7 NFR** e **9 Release** |
+| 9 Release | Configuração pronta (`eas.json`, `docs/RELEASE.md`, `docs/privacy-policy.md`); build e Play Store dependem do usuário |
+
+**Código do plano concluído.** Próximo passo: teste no emulador pelo usuário (roteiro em `docs/RELEASE.md`) e abertura de issues para correções.
 
 ## Ordem de execução
 
