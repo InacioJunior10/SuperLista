@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from "react";
 
-import type { ListsRepository, NewItem } from "@/db/repository";
+import type { ItemPatch, ListsRepository, NewItem } from "@/db/repository";
 import type { ShoppingList } from "@/types/list";
 
 import { budgetStatus, type BudgetStatus } from "./budget";
@@ -35,6 +35,8 @@ export type ShoppingListApi = ShoppingListState & {
   setItemQuantity(itemId: string, quantity: number): Promise<void>;
   addItem(input: NewItem): Promise<void>;
   removeItem(itemId: string): Promise<void>;
+  updateItem(itemId: string, patch: ItemPatch): Promise<void>;
+  updateListInfo(info: { title?: string; market?: string }): Promise<void>;
   updateBudget(cents: number | null): Promise<void>;
   resetChecks(): Promise<void>;
   /** Carrega outra lista (e a torna ativa). */
@@ -161,6 +163,20 @@ export function ListsProvider({ children, repository }: ListsProviderProps) {
         mutate(
           (l) => ({ ...l, items: l.items.filter((i) => i.id !== itemId) }),
           (repo) => repo.removeItem(itemId),
+        ),
+      updateItem: (itemId, patch) => patchItem(itemId, patch),
+      updateListInfo: ({ title, market }) =>
+        mutate(
+          (l) => ({
+            ...l,
+            ...(title !== undefined ? { title } : {}),
+            ...(market !== undefined ? { market: market || undefined } : {}),
+          }),
+          (repo) =>
+            repo.updateList(listRef.current?.id ?? "", {
+              title,
+              market: market === undefined ? undefined : market || null,
+            }),
         ),
       updateBudget: (cents) =>
         mutate(

@@ -4,12 +4,15 @@ import { Alert, SectionList, StyleSheet } from "react-native";
 
 import { ScreenContainer } from "@/components";
 import {
+  AddItemSheet,
   BudgetHero,
+  BudgetSheet,
   CategoryChips,
   CategorySectionHeader,
   EmptyState,
   ListError,
   ListHeader,
+  ListInfoSheet,
   ListLoading,
   ListTip,
   ShoppingItemRow,
@@ -19,13 +22,13 @@ import { useShoppingList } from "@/features/lists/ListsProvider";
 import { spacing } from "@/theme";
 import type { Category, ShoppingItem } from "@/types/list";
 
-// TODO fase 6: abrir o formulário de novo item. Por ora, apenas avisa.
-const handleAddItem = () => Alert.alert("Em breve", "O cadastro de itens chega na próxima versão.");
-
 export default function ListaScreen() {
   const api = useShoppingList();
   const { list, loading, error, items } = { ...api, items: api.list?.items };
   const [filter, setFilter] = useState<Category | null>(null);
+  const [itemSheet, setItemSheet] = useState<{ item?: ShoppingItem } | null>(null);
+  const [budgetOpen, setBudgetOpen] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(false);
 
   // Callbacks estáveis: leem sempre a API mais recente, para as linhas (memo) não re-renderizarem.
   const apiRef = useRef(api);
@@ -37,6 +40,28 @@ export default function ListaScreen() {
     (itemId: string) => router.push({ pathname: "/preco/[itemId]", params: { itemId } }),
     [],
   );
+  const onAdd = useCallback(() => setItemSheet({}), []);
+  const onItemMenu = useCallback((itemId: string) => {
+    const item = apiRef.current.list?.items.find((i) => i.id === itemId);
+    if (!item) return;
+    Alert.alert(item.name, undefined, [
+      { text: "Editar", onPress: () => setItemSheet({ item }) },
+      {
+        text: "Remover",
+        style: "destructive",
+        onPress: () =>
+          Alert.alert("Remover item?", `Remover ${item.name} da lista?`, [
+            { text: "Cancelar", style: "cancel" },
+            {
+              text: "Remover",
+              style: "destructive",
+              onPress: () => void apiRef.current.removeItem(itemId),
+            },
+          ]),
+      },
+      { text: "Cancelar", style: "cancel" },
+    ]);
+  }, []);
   const onRetry = useCallback(() => void apiRef.current.reload(), []);
   const onRecalculate = useCallback(() => {
     Alert.alert("Recalcular lista", "Desmarcar todos os itens já pegos?", [
@@ -58,9 +83,9 @@ export default function ListaScreen() {
 
   const renderItem = useCallback(
     ({ item }: { item: ShoppingItem }) => (
-      <ShoppingItemRow item={item} onToggle={onToggle} onOpen={onOpen} />
+      <ShoppingItemRow item={item} onToggle={onToggle} onOpen={onOpen} onLongPress={onItemMenu} />
     ),
-    [onToggle, onOpen],
+    [onToggle, onOpen, onItemMenu],
   );
   const renderSectionHeader = useCallback(
     ({ section }: { section: (typeof sections)[number] }) => (
@@ -97,7 +122,7 @@ export default function ListaScreen() {
         contentContainerStyle={styles.content}
         ListHeaderComponent={
           <>
-            <ListHeader title={list.title} market={list.market} />
+            <ListHeader title={list.title} market={list.market} onPress={() => setInfoOpen(true)} />
             <BudgetHero
               totalCents={api.estimatedTotalCents}
               checkedCount={api.checkedCount}
@@ -105,15 +130,45 @@ export default function ListaScreen() {
               budgetCents={list.budgetCents}
               status={api.budgetStatus}
               onRecalculate={onRecalculate}
-              onAddItem={handleAddItem}
+              onAddItem={onAdd}
+              onPressBudget={() => setBudgetOpen(true)}
             />
             {isEmpty ? null : (
               <CategoryChips available={available} selected={activeFilter} onSelect={setFilter} />
             )}
           </>
         }
-        ListEmptyComponent={isEmpty ? <EmptyState onAddItem={handleAddItem} /> : null}
+        ListEmptyComponent={isEmpty ? <EmptyState onAddItem={onAdd} /> : null}
         ListFooterComponent={isEmpty ? null : <ListTip />}
+      />
+      <AddItemSheet
+        visible={itemSheet !== null}
+        item={itemSheet?.item}
+        onClose={() => setItemSheet(null)}
+        onSubmit={(input) => {
+          const editing = itemSheet?.item;
+          setItemSheet(null);
+          void (editing ? api.updateItem(editing.id, input) : api.addItem(input));
+        }}
+      />
+      <BudgetSheet
+        visible={budgetOpen}
+        budgetCents={list.budgetCents}
+        onClose={() => setBudgetOpen(false)}
+        onSave={(cents) => {
+          setBudgetOpen(false);
+          void api.updateBudget(cents);
+        }}
+      />
+      <ListInfoSheet
+        visible={infoOpen}
+        title={list.title}
+        market={list.market}
+        onClose={() => setInfoOpen(false)}
+        onSave={(info) => {
+          setInfoOpen(false);
+          void api.updateListInfo(info);
+        }}
       />
     </ScreenContainer>
   );

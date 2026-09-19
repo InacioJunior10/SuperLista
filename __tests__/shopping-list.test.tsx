@@ -114,4 +114,37 @@ describe("useShoppingList", () => {
     expect(result.current.checkedCount).toBe(0);
     expect(result.current.error?.message).toBe("boom");
   });
-});
+
+  it("updateItem persiste e reverte em erro", async () => {
+    const { a } = await seedList();
+    const { result } = await setup();
+    await act(() => result.current.updateItem(a.id, { name: "Arroz integral", quantity: 3 }));
+    const saved = (await repo.listLists())[0].items.find((i) => i.id === a.id);
+    expect(saved?.name).toBe("Arroz integral");
+    expect(saved?.quantity).toBe(3);
+
+    const failing = { ...repo, updateItem: jest.fn().mockRejectedValue(new Error("boom")) } as ListsRepository;
+    const h2 = await setup(failing);
+    await act(() => h2.result.current.updateItem(a.id, { name: "X" }));
+    expect(h2.result.current.list?.items.find((i) => i.id === a.id)?.name).toBe("Arroz integral");
+    expect(h2.result.current.error?.message).toBe("boom");
+  });
+
+  it("updateListInfo persiste (mercado vazio limpa) e reverte em erro", async () => {
+    await seedList();
+    const { result } = await setup();
+    await act(() => result.current.updateListInfo({ title: "Mês", market: "Extra" }));
+    expect(result.current.list).toMatchObject({ title: "Mês", market: "Extra" });
+    let saved = (await repo.listLists())[0];
+    expect(saved).toMatchObject({ title: "Mês", market: "Extra" });
+    await act(() => result.current.updateListInfo({ market: "" }));
+    saved = (await repo.listLists())[0];
+    expect(saved.market).toBeUndefined();
+    expect(saved.title).toBe("Mês");
+
+    const failing = { ...repo, updateList: jest.fn().mockRejectedValue(new Error("boom")) } as ListsRepository;
+    const h2 = await setup(failing);
+    await act(() => h2.result.current.updateListInfo({ title: "Outro" }));
+    expect(h2.result.current.list?.title).toBe("Mês");
+    expect(h2.result.current.error?.message).toBe("boom");
+  });});

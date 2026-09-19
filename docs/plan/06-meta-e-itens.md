@@ -1,5 +1,7 @@
 # Fase 6 — Meta de orçamento e gestão de itens/listas
 
+Status: Concluída
+
 **Branch:** `feature/meta-itens` · **Depende de:** fase 4 · **Paralela com:** fase 5
 **PRD:** RF-06 (meta), `+ Item`, recálculo/reset
 

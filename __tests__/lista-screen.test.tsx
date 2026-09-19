@@ -164,12 +164,11 @@ describe("Tela Lista de Compras", () => {
     expect(await screen.findByText("0 de 4 pegos")).toBeTruthy();
   });
 
-  it("+ Item mostra o aviso 'Em breve' (stub da fase 6)", async () => {
+  it("+ Item abre o formulário", async () => {
     await seed();
-    const alert = jest.spyOn(Alert, "alert").mockImplementation(() => undefined);
     await renderScreen();
     await userEvent.setup().press(screen.getByRole("button", { name: "+ Item" }));
-    expect(alert).toHaveBeenCalledWith("Em breve", expect.any(String));
+    expect(screen.getByText("Novo item")).toBeTruthy();
   });
 
   it("meta com folga: sem aviso", async () => {
@@ -200,11 +199,10 @@ describe("Tela Lista de Compras", () => {
 
   it("lista vazia mostra CTA", async () => {
     await repo.createList({ title: "Vazia" });
-    const alert = jest.spyOn(Alert, "alert").mockImplementation(() => undefined);
     await renderScreen();
     expect(screen.getByText("Sua lista está vazia")).toBeTruthy();
     await userEvent.setup().press(screen.getByRole("button", { name: "Adicionar primeiro item" }));
-    expect(alert).toHaveBeenCalled();
+    expect(screen.getByText("Novo item")).toBeTruthy();
   });
 
   it("mostra erro com 'Tentar novamente'", async () => {
