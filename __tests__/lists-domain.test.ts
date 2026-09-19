@@ -22,6 +22,7 @@ const item = (o: Partial<ShoppingItem> = {}): ShoppingItem => ({
   category: "outros",
   unit: "un",
   quantity: 1,
+  unitPriceCents: 0, // padrão: todo item começa com preço 0
   checked: false,
   ...o,
 });
@@ -37,6 +38,17 @@ describe("totais", () => {
   it("un e kg", () => {
     expect(itemTotalCents(item({ quantity: 6, unitPriceCents: 499 }))).toBe(2994);
     expect(itemTotalCents(item({ unit: "kg", quantity: 500, unitPriceCents: 1590 }))).toBe(795);
+  });
+  it("item com preço padrão 0 não soma no total do topo", () => {
+    const list = { items: [item(), item({ quantity: 2, unitPriceCents: 500 })] };
+    expect(itemTotalCents(list.items[0])).toBe(0);
+    expect(estimatedTotalCents(list)).toBe(1000);
+  });
+  it("total do topo soma TODOS os itens, marcados ou não; atualiza ao salvar um preço", () => {
+    const a = item({ unitPriceCents: 1000 });
+    const b = item({ unitPriceCents: 0 });
+    expect(estimatedTotalCents({ items: [a, b] })).toBe(1000);
+    expect(estimatedTotalCents({ items: [a, { ...b, unitPriceCents: 250 }] })).toBe(1250);
   });
   it("arredondamento: 800 g x R$ 10,25/kg = R$ 8,20", () => {
     const t = itemTotalCents(item({ unit: "kg", quantity: 800, unitPriceCents: 1025 }));

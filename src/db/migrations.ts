@@ -31,6 +31,11 @@ export const MIGRATIONS: readonly Migration[] = [
       CREATE INDEX idx_items_list ON items(list_id, position);
     `,
   },
+  {
+    // Todo item tem preço; o padrão é 0 (a UI mostra "Definir preço"). O default em código está em repository.ts.
+    version: 2,
+    sql: `UPDATE items SET unit_price_cents = 0 WHERE unit_price_cents IS NULL;`,
+  },
 ];
 
 /** Aplica as migrações pendentes usando PRAGMA user_version. Idempotente. */
