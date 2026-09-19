@@ -13,7 +13,7 @@ export type BudgetHeroProps = {
   status: BudgetStatus;
   onRecalculate: () => void;
   onAddItem: () => void;
-  /** Sem ação por ora (edição da meta fica para uma fase futura). */
+  /** Abre o sheet da meta. */
   onPressBudget?: () => void;
 };
 

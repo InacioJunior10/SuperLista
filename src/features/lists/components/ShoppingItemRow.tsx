@@ -13,9 +13,11 @@ export type ShoppingItemRowProps = {
   onToggle: (itemId: string) => void;
   /** Abre o modal de preço (toque na linha, fora do checkbox). */
   onOpen: (itemId: string) => void;
+  /** Pressionar e segurar: editar/remover. */
+  onLongPress?: (itemId: string) => void;
 };
 
-function ShoppingItemRowBase({ item, onToggle, onOpen }: ShoppingItemRowProps) {
+function ShoppingItemRowBase({ item, onToggle, onOpen, onLongPress }: ShoppingItemRowProps) {
   const detail = formatItemDetail(item);
   const done = item.checked;
   return (
@@ -27,6 +29,7 @@ function ShoppingItemRowBase({ item, onToggle, onOpen }: ShoppingItemRowProps) {
       />
       <Pressable
         onPress={() => onOpen(item.id)}
+        onLongPress={() => onLongPress?.(item.id)}
         accessibilityRole="button"
         accessibilityLabel={`${item.name}, ${detail}. Editar preço`}
         style={styles.content}
