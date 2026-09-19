@@ -7,7 +7,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 
-import { colors, hitTarget, spacing } from "@/theme";
+import { colors, hitTarget, sizes } from "@/theme";
 
 import { Icon } from "./Icon";
 
@@ -17,9 +17,9 @@ export type CheckboxProps = {
   accessibilityLabel: string;
 };
 
-const SIZE = spacing.lg + spacing.xs; // 24
+const SIZE = sizes.checkbox;
 const BORDER = 2;
-const CHECK_SIZE = 16;
+const CHECK_SIZE = sizes.checkIcon;
 
 export function Checkbox({ checked, onChange, accessibilityLabel }: CheckboxProps) {
   const progress = useSharedValue(checked ? 1 : 0);

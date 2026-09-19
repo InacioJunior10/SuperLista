@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, type StyleProp, type ViewStyle } from "react-native";
 
-import { colors, hitTarget, radius, spacing, typography } from "@/theme";
+import { colors, hitTarget, radius, sizes, spacing, typography } from "@/theme";
 
 export type ChipProps = {
   label: string;
@@ -11,7 +11,7 @@ export type ChipProps = {
 };
 
 // Pill visual de 36px (DESIGN.md); a área de toque é ampliada para 48 via hitSlop.
-const CHIP_HEIGHT = 36;
+const CHIP_HEIGHT = sizes.chipHeight;
 const HIT_SLOP = (hitTarget - CHIP_HEIGHT) / 2;
 
 export function Chip({ label, active = false, onPress, accessibilityLabel, style }: ChipProps) {
