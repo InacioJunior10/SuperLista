@@ -7,7 +7,8 @@ import type { Db, SqlParams } from "./types";
 
 export const DATABASE_NAME = "superlista.db";
 
-let pending: Promise<ListsRepository> | null = null;
+let pendingDb: Promise<Db> | null = null;
+let pendingLists: Promise<ListsRepository> | null = null;
 
 // expo-sqlite exige `params` nos overloads; o contrato Db os torna opcionais.
 function asDb(db: SQLite.SQLiteDatabase): Db {
@@ -20,21 +21,36 @@ function asDb(db: SQLite.SQLiteDatabase): Db {
   };
 }
 
-async function open(): Promise<ListsRepository> {
+async function openDb(): Promise<Db> {
   const native = await SQLite.openDatabaseAsync(DATABASE_NAME);
   await native.execAsync("PRAGMA journal_mode = WAL;");
   const db = asDb(native);
   await migrate(db);
-  const repo = createListsRepository(db);
-  if (__DEV__) await seedIfEmpty(repo); // dados de exemplo só em desenvolvimento
-  return repo;
+  return db;
 }
 
-/** Abre o banco, aplica migrações e devolve o repositório. Singleton: chamadas repetidas reutilizam a mesma conexão. */
-export function getListsRepository(): Promise<ListsRepository> {
-  pending ??= open().catch((error) => {
-    pending = null; // permite nova tentativa após falha
+/**
+ * Conexão única do app (singleton): abre o banco e aplica as migrações uma vez.
+ * Novos repositórios devem obter o `Db` aqui, em arquivos próprios (ex.: `getPurchasesRepository`
+ * em src/db/purchases.ts), em vez de editar este arquivo.
+ */
+export function getDb(): Promise<Db> {
+  pendingDb ??= openDb().catch((error) => {
+    pendingDb = null; // permite nova tentativa após falha
     throw error;
   });
-  return pending;
+  return pendingDb;
+}
+
+/** Repositório de listas. Em desenvolvimento (`__DEV__`), semeia uma lista de exemplo se o banco estiver vazio. */
+export function getListsRepository(): Promise<ListsRepository> {
+  pendingLists ??= (async () => {
+    const repo = createListsRepository(await getDb());
+    if (__DEV__) await seedIfEmpty(repo);
+    return repo;
+  })().catch((error) => {
+    pendingLists = null;
+    throw error;
+  });
+  return pendingLists;
 }
