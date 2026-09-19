@@ -14,6 +14,21 @@ Nenhum segredo/credencial vai para o repositório (keystore fica no EAS; chave d
 - Emulador Android aberto (ou aparelho com depuração USB): `npm run android`.
 - Expo Go: `npm start`, escaneie o QR code no Expo Go (limitações: módulos nativos podem exigir development build).
 
+### APK local (Windows, sem EAS)
+
+```powershell
+.\scripts\build-apk.ps1            # gera o APK e copia para %USERPROFILE%\Downloads\SuperLista-<versão>-arm64-v8a.apk
+.\scripts\build-apk.ps1 -Install   # também instala no celular por USB (adb)
+```
+
+Requisitos: Android SDK (`ANDROID_HOME`) e JDK 17+ (o script usa o JBR do Android Studio se achar; ou defina `SUPERLISTA_JAVA_HOME`). A primeira vez baixa o Gradle, a plataforma 36 e o NDK 27 (vários minutos); as seguintes levam ~30 s a poucos minutos. A pasta `android/` é gerada (`expo prebuild`) e ignorada pelo git. O APK é assinado com a chave de debug do template: serve para teste, não para a Play Store.
+
+Instalar no celular: `adb install -r "<caminho do apk>"` (depuração USB autorizada) ou copie o arquivo e abra-o no aparelho (permitir "instalar apps desconhecidos").
+
+**Antivírus que intercepta HTTPS (ex.: Avast "Web/Mail Shield")**: o Java não confia no certificado dele e o Gradle falha com `PKIX path building failed`. Descubra o thumbprint da raiz do antivírus no repositório de certificados do Windows e rode uma vez `.\scripts\build-apk.ps1 -TrustThumbprint <sha1>`: o script cria um truststore PRIVADO em `%USERPROFILE%\.superlista-build\cacerts` (cópia do Java + essa raiz) e o reutiliza nos builds seguintes, sem alterar o Java do sistema. Alternativa: desativar o escaneamento HTTPS no antivírus.
+
+Outros arquiteturas (ex.: emulador x86_64): `-Arch "arm64-v8a,x86_64"`. Recomeçar do zero: `-Clean`.
+
 ## 3. Builds
 - APK de teste (instalável direto): `eas build --platform android --profile preview`
 - AAB de produção (Play Store): `eas build --platform android --profile production`
