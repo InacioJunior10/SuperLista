@@ -36,6 +36,36 @@ export const MIGRATIONS: readonly Migration[] = [
     version: 2,
     sql: `UPDATE items SET unit_price_cents = 0 WHERE unit_price_cents IS NULL;`,
   },
+  {
+    // Compras finalizadas (checkout): snapshot dos itens pegos.
+    version: 3,
+    sql: `
+      CREATE TABLE purchases (
+        id             TEXT PRIMARY KEY NOT NULL,
+        title          TEXT NOT NULL,
+        market         TEXT,
+        budget_cents   INTEGER,
+        total_cents    INTEGER NOT NULL,
+        item_count     INTEGER NOT NULL,
+        payment_method TEXT NOT NULL,
+        created_at     TEXT NOT NULL
+      );
+
+      CREATE TABLE purchase_items (
+        id               TEXT PRIMARY KEY NOT NULL,
+        purchase_id      TEXT NOT NULL REFERENCES purchases(id) ON DELETE CASCADE,
+        name             TEXT NOT NULL,
+        category         TEXT NOT NULL,
+        unit             TEXT NOT NULL,
+        quantity         INTEGER NOT NULL,
+        unit_price_cents INTEGER NOT NULL,
+        total_cents      INTEGER NOT NULL
+      );
+
+      CREATE INDEX idx_purchase_items_purchase ON purchase_items(purchase_id);
+      CREATE INDEX idx_purchase_items_name ON purchase_items(name);
+    `,
+  },
 ];
 
 /** Aplica as migrações pendentes usando PRAGMA user_version. Idempotente. */
