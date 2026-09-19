@@ -14,6 +14,7 @@ Regras de produto/design:
 - Toda UI usa os tokens de `@/theme` (`colors`, `typography`, `spacing`, `radius`, `elevation`); **sem cores, tamanhos ou fontes soltos**. Fonte: Plus Jakarta Sans. Cor primária `#00A86B`. Somente modo claro.
 - **Dinheiro é sempre inteiro em centavos**; exiba com `formatBRL` (`@/utils/money`), padrão `R$ 0,00`, algarismos tabulares.
 - Offline-first: fluxo principal sem internet (persistência local em `src/db`, `expo-sqlite`).
+- Banco: acesse só via `getListsRepository()` (`@/db`); nunca escreva SQL fora de `src/db`. Mudança de schema = **nova migração** em `migrations.ts` (`version + 1`), jamais editar uma existente. Testes de banco usam `createTestDb()` de `test-utils/`.
 - Textos da UI em pt-BR, idênticos ao PRD (ex.: "Salvar Preço", "Marcar como pego no carrinho").
 - Alvos de toque ≥ 48px; `accessibilityRole`/`accessibilityLabel` em elementos interativos.
 - Para construir o app, siga as skills `superlista-build-from-prd` e `superlista-design-system`. Se o design/PRD mudar no Stitch, use `superlista-sync-stitch` (MCP `stitch` já configurado).
@@ -42,6 +43,15 @@ Guia completo: `docs/WORKTREES.md`. Resumo das regras:
 - Servidores Expo em paralelo usam portas diferentes (`--port 8082`).
 - Ao delegar a um agent, informe branch, escopo de arquivos, requisito do PRD (RF-xx) e critério de pronto. Para subagents use `isolation: "worktree"`.
 
+## Memória de sessões (`docs/memory/`) — REGRA FIXA
+
+Ao final de **cada sessão de trabalho**, crie (ou atualize, se for a mesma sessão) um arquivo em `docs/memory/` descrevendo o que foi feito.
+
+- Nome: `AAAA-MM-DD-sessao-NN-<slug>.md` (NN sequencial; ex.: `2026-09-19-sessao-01-setup-stitch-sqlite.md`).
+- Conteúdo: objetivo, o que foi feito (por área), decisões, armadilhas encontradas, pendências/próximos passos, branch e commits.
+- Inclua o arquivo no commit da branch da tarefa. Não guarde segredos nem chaves.
+- No início de uma sessão, leia o arquivo mais recente de `docs/memory/` para retomar o contexto.
+
 ## Comandos (PowerShell)
 
 | Tarefa | Comando |
@@ -67,7 +77,8 @@ src/components/   Componentes reutilizáveis (UI pura)
 src/features/     Módulos por funcionalidade (ex.: lists/) com componentes, hooks e lógica
 src/hooks/        Hooks compartilhados
 src/services/     Integrações externas / API
-src/db/           Persistência local (expo-sqlite / AsyncStorage)
+src/db/           Persistência local (expo-sqlite): migrations.ts (PRAGMA user_version), repository.ts, seed.ts, client.ts (singleton `getListsRepository()`)
+test-utils/       Helpers de teste (sqliteTestDb.ts: SQLite real em memória via node:sqlite)
 src/theme/        Tokens do design system (colors, typography, layout)
 src/types/        Tipos TypeScript compartilhados
 src/utils/        Funções puras
