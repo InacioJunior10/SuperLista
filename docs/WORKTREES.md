@@ -15,7 +15,9 @@ As worktrees ficam **fora** do repositório (pasta irmã `SuperLista-worktrees`)
 
 ## Convenção de branches
 
-`<tipo>/<slug-curto>` em minúsculas: `feat/`, `fix/`, `chore/`, `docs/`, `refactor/`, `test/`. Exemplos: `feat/lista-compras`, `feat/modal-preco`, `fix/total-arredondamento`. Nome da pasta = branch com `/` trocado por `-`.
+`<tipo>/<slug-curto>` em minúsculas: `feature/` (ou `feat/`), `fix/`, `chore/`, `docs/`, `refactor/`, `test/`. Exemplos: `feature/lista-compras`, `feature/modal-preco`, `fix/total-arredondamento`. Nome da pasta = branch com `/` trocado por `-`.
+
+O `new-worktree.ps1` cria a branch se ela não existir e reaproveita se já existir (ex.: branch criada manualmente). Uma branch com checkout na worktree principal não pode ganhar outra worktree: rode `git switch main` na principal antes.
 
 ## Fluxo
 
