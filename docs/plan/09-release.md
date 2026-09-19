@@ -2,6 +2,10 @@
 
 **Branch:** `chore/release-1-0` · **Depende de:** fase 7 (fase 8 opcional para a v1.0) · Skill: `rn-build-release`
 
+## Status
+**Pronto (configuração):** `eas.json` (development/preview/production), `versionCode`/`buildNumber` em `app.json`, `docs/RELEASE.md`, `docs/privacy-policy.md`; `expo export --platform android` compila.
+**Depende do usuário:** `eas login`, builds (APK preview / AAB production), teste manual em aparelho, conta e ficha na Play Store (política com e-mail/data preenchidos), OTA, tag `v1.0.0` e `docs/memory`.
+
 ## Tarefas
 1. **Identidade**: ícone adaptativo (fundo `#00A86B`, logo), splash, nome "SuperLista", `bundleIdentifier`/`package` = `com.superlista.app`, versão `1.0.0` em `app.json`.
 2. **Qualidade final**: `npx expo-doctor`, `.\scripts\check.ps1`, teste manual em Android físico seguindo o roteiro do PRD (criar lista → informar preços → marcar itens → conferir total e meta, em modo avião).
