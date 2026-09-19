@@ -128,7 +128,7 @@ export default function ListaScreen() {
           <>
             <ListHeader title={list.title} market={list.market} onPress={() => setInfoOpen(true)} />
             <BudgetHero
-              totalCents={api.estimatedTotalCents}
+              totalCents={api.cartTotalCents}
               checkedCount={api.checkedCount}
               totalCount={api.totalCount}
               budgetCents={list.budgetCents}

@@ -15,6 +15,7 @@ export const CATEGORIES: readonly CategoryInfo[] = [
   { key: "laticinios", label: "Laticínios & Frios", chipLabel: "Laticínios", icon: "cheese" },
   { key: "padaria", label: "Padaria & Matinais", chipLabel: "Padaria", icon: "bread-slice-outline" },
   { key: "carnes", label: "Carnes & Aves", chipLabel: "Carnes", icon: "food-drumstick-outline" },
+  { key: "mercearia", label: "Mercearia & Grãos", chipLabel: "Mercearia", icon: "basket-outline" },
   { key: "limpeza", label: "Limpeza & Higiene", chipLabel: "Limpeza", icon: "spray-bottle" },
   { key: "outros", label: "Outros", chipLabel: "Outros", icon: "dots-horizontal" },
 ];

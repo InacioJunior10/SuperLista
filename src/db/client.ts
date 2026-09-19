@@ -42,11 +42,11 @@ export function getDb(): Promise<Db> {
   return pendingDb;
 }
 
-/** Repositório de listas. Em desenvolvimento (`__DEV__`), semeia uma lista de exemplo se o banco estiver vazio. */
+/** Repositório de listas. Em qualquer build, semeia a lista inicial se o banco estiver vazio. */
 export function getListsRepository(): Promise<ListsRepository> {
   pendingLists ??= (async () => {
     const repo = createListsRepository(await getDb());
-    if (__DEV__) await seedIfEmpty(repo);
+    await seedIfEmpty(repo);
     return repo;
   })().catch((error) => {
     pendingLists = null;

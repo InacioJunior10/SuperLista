@@ -26,6 +26,6 @@ export function buildPriceChart(points: PriceHistoryPoint[]): ChartBar[] {
     label: formatShortDate(p.createdAt),
     cents: p.unitPriceCents,
     ratio: max > 0 ? p.unitPriceCents / max : 0,
-    valueLabel: `${formatBRL(p.unitPriceCents)}/${p.unit}`,
+    valueLabel: `${formatBRL(p.unitPriceCents)}/${p.unit === "un" ? "un" : "kg"}`,
   }));
 }

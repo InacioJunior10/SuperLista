@@ -34,10 +34,13 @@ describe("categorias", () => {
       "laticinios",
       "padaria",
       "carnes",
+      "mercearia",
       "limpeza",
       "outros",
     ]);
     expect(CATEGORIES[0].label).toBe("Hortifrúti & Feira");
+    expect(CATEGORIES.find((c) => c.key === "mercearia")).toMatchObject({ label: "Mercearia & Grãos", chipLabel: "Mercearia" });
+    expect(CATEGORIES.find((c) => c.key === "limpeza")?.label).toBe("Limpeza & Higiene");
   });
 });
 
@@ -51,11 +54,17 @@ describe("totais", () => {
     expect(itemTotalCents(list.items[0])).toBe(0);
     expect(estimatedTotalCents(list)).toBe(1000);
   });
-  it("total do topo soma TODOS os itens, marcados ou não; atualiza ao salvar um preço", () => {
-    const a = item({ unitPriceCents: 1000 });
-    const b = item({ unitPriceCents: 0 });
+  it("estimatedTotalCents soma todos; cartTotalCents só os marcados; ambos reagem ao preço", () => {
+    const a = item({ unitPriceCents: 1000, checked: true });
+    const b = item({ unitPriceCents: 0, checked: true });
     expect(estimatedTotalCents({ items: [a, b] })).toBe(1000);
-    expect(estimatedTotalCents({ items: [a, { ...b, unitPriceCents: 250 }] })).toBe(1250);
+    expect(cartTotalCents({ items: [a, { ...b, unitPriceCents: 250 }] })).toBe(1250);
+    expect(cartTotalCents({ items: [a, { ...b, unitPriceCents: 250, checked: false }] })).toBe(1000);
+  });
+  it("unidade g: quantidade em gramas, preço por kg (mesma fórmula do kg)", () => {
+    const g = itemTotalCents(item({ unit: "g", quantity: 500, unitPriceCents: 4290 }));
+    expect(g).toBe(2145);
+    expect(g).toBe(itemTotalCents(item({ unit: "kg", quantity: 500, unitPriceCents: 4290 })));
   });
   it("arredondamento: 800 g x R$ 10,25/kg = R$ 8,20", () => {
     const t = itemTotalCents(item({ unit: "kg", quantity: 800, unitPriceCents: 1025 }));
@@ -105,9 +114,13 @@ describe("agrupamento", () => {
 
 describe("meta", () => {
   const at = (cents: number) =>
-    budgetStatus({ budgetCents: 10000, items: [item({ unitPriceCents: cents })] });
+    budgetStatus({ budgetCents: 10000, items: [item({ unitPriceCents: cents, checked: true })] });
   it("sem meta", () => {
-    expect(budgetStatus({ items: [item({ unitPriceCents: 500 })] }).level).toBe("none");
+    expect(budgetStatus({ items: [item({ unitPriceCents: 500, checked: true })] }).level).toBe("none");
+  });
+  it("só itens pegos contam para a meta", () => {
+    const s = budgetStatus({ budgetCents: 10000, items: [item({ unitPriceCents: 9000 })] });
+    expect(s).toEqual({ percent: 0, remainingCents: 10000, level: "ok" });
   });
   it("limites 79/80/100/101%", () => {
     expect(at(7900).level).toBe("ok");
@@ -120,20 +133,35 @@ describe("meta", () => {
   });
 });
 
-describe("seed Compras do mês", () => {
-  it("totais reproduzíveis", async () => {
+describe("lista inicial", () => {
+  it("41 itens, preços zerados, nada marcado, sem meta", async () => {
     const db = createTestDb();
     await migrate(db);
     const repo = createListsRepository(db);
     await seedIfEmpty(repo);
     const list = (await repo.listLists())[0];
     const full = (await repo.getList(list.id))!;
-    expect(totalCount(full)).toBe(12);
-    expect(checkedCount(full)).toBe(5);
-    expect(cartTotalCents(full)).toBe(4971);
-    expect(estimatedTotalCents(full)).toBe(18500);
-    expect(budgetStatus(full)).toEqual({ percent: 93, remainingCents: 1500, level: "warning" });
-    expect(groupByCategory(full.items).map((s) => s.count)).toEqual([3, 3, 2, 2, 2]);
+    expect(full.title).toBe("Lista de compras");
+    expect(full.market).toBeUndefined();
+    expect(full.budgetCents).toBeUndefined();
+    expect(totalCount(full)).toBe(41);
+    expect(checkedCount(full)).toBe(0);
+    expect(cartTotalCents(full)).toBe(0);
+    expect(estimatedTotalCents(full)).toBe(0);
+    expect(full.items.every((i) => i.unitPriceCents === 0)).toBe(true);
+    expect(budgetStatus(full).level).toBe("none");
+    expect(full.items[0]).toMatchObject({ name: "Arroz", unit: "kg", quantity: 1000, category: "mercearia" });
+    expect(full.items[10]).toMatchObject({ name: "Muçarela fatiada", unit: "g", quantity: 500, category: "laticinios" });
+    expect(full.items[40].name).toMatch(/^Caixas grandes de suco/);
+    expect(groupByCategory(full.items).map((s) => [s.category.key, s.count])).toEqual([
+      ["hortifruti", 4],
+      ["laticinios", 5],
+      ["padaria", 1],
+      ["carnes", 7],
+      ["mercearia", 13],
+      ["limpeza", 10],
+      ["outros", 1],
+    ]);
     db.close();
   });
 });

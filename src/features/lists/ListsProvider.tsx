@@ -14,7 +14,7 @@ import type { ItemPatch, ListsRepository, NewItem } from "@/db/repository";
 import type { ShoppingList } from "@/types/list";
 
 import { budgetStatus, type BudgetStatus } from "./budget";
-import { checkedCount, estimatedTotalCents, totalCount } from "./totals";
+import { cartTotalCents, checkedCount, estimatedTotalCents, totalCount } from "./totals";
 
 export const ACTIVE_LIST_KEY = "superlista:activeListId";
 const DEFAULT_LIST_TITLE = "Minha lista";
@@ -26,7 +26,12 @@ export type ShoppingListState = {
 };
 
 export type ShoppingListApi = ShoppingListState & {
+  /** Soma só dos itens marcados "Pego" (total do topo). */
+  cartTotalCents: number;
+  /** Soma de todos os itens (marcados ou não). */
   estimatedTotalCents: number;
+  /** Itens ainda não pegos (totalCount - checkedCount). */
+  pendingCount: number;
   checkedCount: number;
   totalCount: number;
   budgetStatus: BudgetStatus;
@@ -139,7 +144,9 @@ export function ListsProvider({ children, repository }: ListsProviderProps) {
       );
     return {
       ...state,
+      cartTotalCents: list ? cartTotalCents(list) : 0,
       estimatedTotalCents: list ? estimatedTotalCents(list) : 0,
+      pendingCount: list ? totalCount(list) - checkedCount(list) : 0,
       checkedCount: list ? checkedCount(list) : 0,
       totalCount: list ? totalCount(list) : 0,
       budgetStatus: budgetStatus(list ?? { items: [] }),

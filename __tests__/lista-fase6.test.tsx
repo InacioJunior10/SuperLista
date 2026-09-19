@@ -104,7 +104,7 @@ describe("Fase 6: itens, meta e info da lista", () => {
 
   it("define, alerta e remove a meta", async () => {
     const list = await repo.createList({ title: "L" });
-    await repo.addItem(list.id, { name: "Arroz", unitPriceCents: 900 });
+    await repo.addItem(list.id, { name: "Arroz", unitPriceCents: 900, checked: true });
     await renderScreen();
     const user = userEvent.setup();
     await user.press(screen.getByRole("button", { name: "Definir meta" }));
@@ -142,5 +142,25 @@ describe("Fase 6: itens, meta e info da lista", () => {
     expect(await screen.findByText("Nova")).toBeTruthy();
     expect(screen.getByText(/Extra/)).toBeTruthy();
     expect(await persisted()).toMatchObject({ title: "Nova", market: "Extra" });
+  });
+
+  it("unidade Gramas: chips Unidade/Kg/Gramas e quantidade inteira em gramas (padrão 100)", async () => {
+    await repo.createList({ title: "Vazia" });
+    await renderScreen();
+    const user = userEvent.setup();
+    await user.press(screen.getByRole("button", { name: "+ Item" }));
+    expect(screen.getByRole("button", { name: "Unidade un" })).toBeTruthy();
+    await user.type(screen.getByLabelText("Nome do item"), "Presunto");
+    expect(screen.getByRole("button", { name: "Laticínios" })).toBeSelected();
+    await user.press(screen.getByRole("button", { name: "Unidade g" }));
+    expect(screen.getByText("Quantidade (g)")).toBeTruthy();
+    expect(screen.getByLabelText("Quantidade").props.value).toBe("100");
+    const qty = screen.getByLabelText("Quantidade");
+    await user.clear(qty);
+    await user.type(qty, "400");
+    await user.press(screen.getByRole("button", { name: "Adicionar" }));
+    await waitFor(async () => expect((await persisted()).items).toHaveLength(1));
+    expect((await persisted()).items[0]).toMatchObject({ name: "Presunto", unit: "g", quantity: 400 });
+    expect(screen.getByText("400 g")).toBeTruthy();
   });
 });

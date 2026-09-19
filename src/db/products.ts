@@ -1,10 +1,12 @@
+import type { Unit } from "@/types/list";
+
 import type { Db } from "./types";
 
 export type Product = {
   ean: string;
   name: string;
   category: string;
-  unit: "kg" | "un";
+  unit: Unit;
 };
 
 export type ProductsRepository = {

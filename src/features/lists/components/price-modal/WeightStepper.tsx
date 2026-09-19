@@ -7,16 +7,16 @@ import { formatKgShort, STEP_GRAMS } from "@/utils/weight";
 
 export type WeightStepperProps = {
   unit: Unit;
-  /** un: unidades; kg: gramas. */
+  /** un: unidades; kg e g: gramas. */
   value: number;
   onChange: (value: number) => void;
 };
 
-/** Stepper do modal: un de 1 em 1 (mín. 1); kg de 50 g em 50 g (mín. 50 g), exibindo em kg. */
+/** Stepper do modal: un de 1 em 1 (mín. 1); kg e g de 50 g em 50 g (mín. 50 g), exibindo em kg ou em g. */
 export function WeightStepper({ unit, value, onChange }: WeightStepperProps) {
-  const step = unit === "kg" ? STEP_GRAMS : 1;
+  const step = unit === "un" ? 1 : STEP_GRAMS;
   const canDec = value - step >= step;
-  const text = unit === "kg" ? formatKgShort(value) : `${value} un`;
+  const text = unit === "kg" ? formatKgShort(value) : unit === "g" ? `${value} g` : `${value} un`;
   return (
     <View style={styles.pill}>
       <Pressable

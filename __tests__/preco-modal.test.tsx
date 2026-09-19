@@ -173,3 +173,24 @@ describe("Modal Informar Preço", () => {
 });
 
 
+
+describe("Modal Informar Preço: unidade g", () => {
+  it("mostra gramas, preço por kg, passos de 50 g e total pelo mesmo cálculo do kg", async () => {
+    const list = await repo.createList({ title: "L" });
+    const item = await repo.addItem(list.id, {
+      name: "Presunto",
+      category: "laticinios",
+      unit: "g",
+      quantity: 500,
+      unitPriceCents: 4290,
+    });
+    await open(item.id);
+    expect(screen.getByText("Preço por kg")).toBeTruthy();
+    expect(screen.getByText("Pesagem: 500 g × R$ 42,90/kg")).toBeTruthy();
+    expect(screen.getByText("500 g")).toBeTruthy();
+    expect(screen.getByText(formatBRL(2145))).toBeTruthy();
+    await userEvent.setup().press(screen.getByRole("button", { name: "Aumentar quantidade" }));
+    expect(screen.getByText("550 g")).toBeTruthy();
+    expect(screen.getByText("Pesagem: 550 g × R$ 42,90/kg")).toBeTruthy();
+  });
+});
