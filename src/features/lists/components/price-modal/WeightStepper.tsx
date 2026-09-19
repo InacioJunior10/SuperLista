@@ -27,7 +27,11 @@ export function WeightStepper({ unit, value, onChange }: WeightStepperProps) {
         accessibilityState={{ disabled: !canDec }}
         style={styles.btn}
       >
-        <Icon name="remover" size={sizes.iconMd} color={canDec ? colors.brand : colors.strokeStrong} />
+        <Icon
+          name="remover"
+          size={sizes.iconMd}
+          color={canDec ? colors.brand : colors.strokeStrong}
+        />
       </Pressable>
       <Text accessibilityLabel={`Quantidade: ${text}`} style={styles.value}>
         {text}

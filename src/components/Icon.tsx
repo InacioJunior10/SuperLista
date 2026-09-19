@@ -23,6 +23,10 @@ export const iconMap = {
   adicionar: "plus",
   remover: "minus",
   recalcular: "calculator-variant-outline",
+  reiniciar: "restart",
+  excluir: "trash-can-outline",
+  perfil: "account",
+  dica: "lightbulb-outline",
 } as const satisfies Record<string, GlyphName>;
 
 export type IconName = keyof typeof iconMap;

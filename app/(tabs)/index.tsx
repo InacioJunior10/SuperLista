@@ -62,6 +62,18 @@ export default function ListaScreen() {
       { text: "Cancelar", style: "cancel" },
     ]);
   }, []);
+  const onDelete = useCallback((itemId: string) => {
+    const item = apiRef.current.list?.items.find((i) => i.id === itemId);
+    if (!item) return;
+    Alert.alert("Excluir item?", `Excluir "${item.name}" da lista?`, [
+      { text: "Cancelar", style: "cancel" },
+      {
+        text: "Excluir",
+        style: "destructive",
+        onPress: () => void apiRef.current.removeItem(itemId),
+      },
+    ]);
+  }, []);
   const onRetry = useCallback(() => void apiRef.current.reload(), []);
   const onRecalculate = useCallback(() => {
     Alert.alert("Recalcular lista", "Desmarcar todos os itens já pegos?", [
@@ -83,9 +95,15 @@ export default function ListaScreen() {
 
   const renderItem = useCallback(
     ({ item }: { item: ShoppingItem }) => (
-      <ShoppingItemRow item={item} onToggle={onToggle} onOpen={onOpen} onLongPress={onItemMenu} />
+      <ShoppingItemRow
+        item={item}
+        onToggle={onToggle}
+        onOpen={onOpen}
+        onLongPress={onItemMenu}
+        onDelete={onDelete}
+      />
     ),
-    [onToggle, onOpen, onItemMenu],
+    [onToggle, onOpen, onItemMenu, onDelete],
   );
   const renderSectionHeader = useCallback(
     ({ section }: { section: (typeof sections)[number] }) => (
@@ -131,6 +149,7 @@ export default function ListaScreen() {
               totalCents={api.cartTotalCents}
               checkedCount={api.checkedCount}
               totalCount={api.totalCount}
+              pendingCount={api.pendingCount}
               budgetCents={list.budgetCents}
               status={api.budgetStatus}
               onRecalculate={onRecalculate}
@@ -138,7 +157,12 @@ export default function ListaScreen() {
               onPressBudget={() => setBudgetOpen(true)}
             />
             {isEmpty ? null : (
-              <CategoryChips available={available} selected={activeFilter} onSelect={setFilter} />
+              <CategoryChips
+                available={available}
+                totalCount={api.totalCount}
+                selected={activeFilter}
+                onSelect={setFilter}
+              />
             )}
           </>
         }

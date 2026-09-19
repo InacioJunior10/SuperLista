@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 
 import { Icon, type IconName } from "@/components";
-import { colors, typography } from "@/theme";
+import { colors, elevation, typography } from "@/theme";
 
 const TABS: { name: string; title: string; icon: IconName }[] = [
   { name: "index", title: "Lista", icon: "lista" },
@@ -17,8 +17,12 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarActiveTintColor: colors.brand,
         tabBarInactiveTintColor: colors.slateMuted,
-        tabBarLabelStyle: typography.labelMd,
-        tabBarStyle: { backgroundColor: colors.card, borderTopColor: colors.stroke },
+        tabBarLabelStyle: typography.labelSm,
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopWidth: 0,
+          ...elevation.totalizer,
+        },
       }}
     >
       {TABS.map((tab) => (
@@ -29,7 +33,11 @@ export default function TabsLayout() {
             title: tab.title,
             tabBarAccessibilityLabel: tab.title,
             tabBarIcon: ({ focused, size }) => (
-              <Icon name={tab.icon} size={size} color={focused ? colors.brand : colors.slateMuted} />
+              <Icon
+                name={tab.icon}
+                size={size}
+                color={focused ? colors.brand : colors.slateMuted}
+              />
             ),
           }}
         />

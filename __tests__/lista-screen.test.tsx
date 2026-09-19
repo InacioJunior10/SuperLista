@@ -77,7 +77,7 @@ async function renderScreen(children: React.ReactNode = null) {
       {children}
     </ListsProvider>,
   );
-  await screen.findByText("Total da lista");
+  await screen.findByText("Total estimado no carrinho");
 }
 
 describe("Tela Lista de Compras", () => {
@@ -107,7 +107,7 @@ describe("Tela Lista de Compras", () => {
     await user.press(screen.getByRole("button", { name: "Padaria" }));
     expect(screen.getByText("Pão")).toBeTruthy();
     expect(screen.queryByText("Tomate")).toBeNull();
-    await user.press(screen.getByRole("button", { name: "Todos" }));
+    await user.press(screen.getByRole("button", { name: "Todos (4)" }));
     expect(screen.getByText("Tomate")).toBeTruthy();
     expect(screen.queryByRole("button", { name: "Carnes" })).toBeNull();
   });
@@ -253,5 +253,71 @@ describe("Tela Lista de Compras", () => {
     expect(screen.getByText("150 de 200 pegos")).toBeTruthy();
     expect(screen.getByText(formatBRL(15000))).toBeTruthy();
     expect(screen.getByText("Item 1")).toBeTruthy();
+  });
+
+  it("mostra os textos do modelo: total estimado, progresso, pendentes e Todos (N)", async () => {
+    const { tomate } = await seed();
+    await renderScreen();
+    expect(screen.getByText("Progresso de itens")).toBeTruthy();
+    expect(screen.getByText("4 itens pendentes ignorados")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Todos (4)" })).toBeTruthy();
+    await userEvent.setup().press(screen.getByRole("checkbox", { name: /Marcar Tomate/ }));
+    expect(await screen.findByText("3 itens pendentes ignorados")).toBeTruthy();
+    for (const name of ["Leite", "Iogurte", "Pão"]) {
+      await userEvent.setup().press(screen.getByRole("checkbox", { name: new RegExp(name) }));
+    }
+    expect(await screen.findByText("Todos os itens no carrinho!")).toBeTruthy();
+    expect(tomate.id).toBeTruthy();
+  });
+
+  it("singular: 1 item pendente ignorado", async () => {
+    await seed(undefined, true);
+    const items = (await repo.listLists())[0].items;
+    await repo.updateItem(items[0].id, { checked: false });
+    await renderScreen();
+    expect(screen.getByText("1 item pendente ignorado")).toBeTruthy();
+  });
+
+  describe("lixeira", () => {
+    const lixeira = (name: string) => screen.getByRole("button", { name: `Excluir ${name}` });
+
+    it("há um botão Excluir por item", async () => {
+      await seed();
+      await renderScreen();
+      for (const n of ["Tomate", "Leite", "Iogurte", "Pão"]) expect(lixeira(n)).toBeTruthy();
+      expect(screen.getAllByRole("button", { name: /^Excluir / })).toHaveLength(4);
+    });
+
+    it("pede confirmação; Cancelar não exclui e não abre o modal de preço", async () => {
+      await seed();
+      const alert = jest.spyOn(Alert, "alert").mockImplementation(() => undefined);
+      await renderScreen();
+      await userEvent.setup().press(lixeira("Leite"));
+      expect(alert.mock.calls[0][0]).toBe("Excluir item?");
+      expect(alert.mock.calls[0][1]).toBe('Excluir "Leite" da lista?');
+      const buttons = alert.mock.calls[0][2] ?? [];
+      expect(buttons.find((b) => b.text === "Cancelar")?.style).toBe("cancel");
+      expect(buttons.find((b) => b.text === "Excluir")?.style).toBe("destructive");
+      await act(async () => buttons.find((b) => b.text === "Cancelar")?.onPress?.());
+      expect(screen.getByText("Leite")).toBeTruthy();
+      expect((await repo.listLists())[0].items).toHaveLength(4);
+      expect(router.push).not.toHaveBeenCalled();
+    });
+
+    it("Excluir remove o item e recalcula o total dos pegos", async () => {
+      await seed(undefined, true);
+      const alert = jest.spyOn(Alert, "alert").mockImplementation(() => undefined);
+      await renderScreen();
+      expect(screen.getByText("4 de 4 pegos")).toBeTruthy();
+      expect(screen.getByText(formatBRL(SEED_TOTAL))).toBeTruthy();
+      await userEvent.setup().press(lixeira("Leite"));
+      const buttons = alert.mock.calls[0][2] ?? [];
+      await act(async () => buttons.find((b) => b.text === "Excluir")?.onPress?.());
+      expect(await screen.findByText("3 de 3 pegos")).toBeTruthy();
+      expect(screen.getByText(formatBRL(SEED_TOTAL - 1000))).toBeTruthy();
+      expect(screen.queryByText("Leite")).toBeNull();
+      await waitFor(async () => expect((await repo.listLists())[0].items).toHaveLength(3));
+      expect(router.push).not.toHaveBeenCalled();
+    });
   });
 });

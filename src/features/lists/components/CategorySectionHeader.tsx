@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 
 import { Icon } from "@/components";
 import type { CategorySection } from "@/features/lists/grouping";
-import { colors, radius, sizes, spacing, typography } from "@/theme";
+import { categoryColors, colors, radius, sizes, spacing, typography } from "@/theme";
 
 export type CategorySectionHeaderProps = {
   section: Pick<CategorySection, "category" | "countLabel">;
@@ -13,8 +13,12 @@ const ICON_BOX = sizes.iconLg + spacing.sm;
 export function CategorySectionHeader({ section }: CategorySectionHeaderProps) {
   return (
     <View style={styles.row}>
-      <View style={styles.icon}>
-        <Icon name={section.category.key} size={sizes.iconMd} color={colors.brand} />
+      <View style={[styles.icon, { backgroundColor: categoryColors[section.category.key].bg }]}>
+        <Icon
+          name={section.category.key}
+          size={sizes.iconMd}
+          color={categoryColors[section.category.key].fg}
+        />
       </View>
       <Text accessibilityRole="header" style={styles.name}>
         {section.category.label}
@@ -29,7 +33,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.sm,
-    paddingTop: spacing.base,
+    paddingTop: spacing.lg,
     paddingBottom: spacing.sm,
     backgroundColor: colors.canvas,
   },
@@ -37,10 +41,9 @@ const styles = StyleSheet.create({
     width: ICON_BOX,
     height: ICON_BOX,
     borderRadius: radius.full,
-    backgroundColor: colors.brandSoft,
     alignItems: "center",
     justifyContent: "center",
   },
-  name: { ...typography.headlineSm, flex: 1, color: colors.slate },
-  count: { ...typography.bodyMd, color: colors.slateMuted },
+  name: { ...typography.headlineSm, flex: 1, color: colors.onSurface },
+  count: { ...typography.labelMd, color: colors.onSurfaceVariant },
 });

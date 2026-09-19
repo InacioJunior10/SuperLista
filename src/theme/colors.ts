@@ -48,3 +48,14 @@ export const colors = {
 } as const;
 
 export type ColorToken = keyof typeof colors;
+
+/** Círculo de ícone das seções por categoria (cores do modelo Stitch da Lista). */
+export const categoryColors = {
+  hortifruti: { bg: "#78fbb6", fg: "#005232" },
+  laticinios: { bg: "#ffdea8", fg: "#271900" },
+  padaria: { bg: "#d8e3fb", fg: "#3d4a41" },
+  carnes: { bg: "#ffdad6", fg: "#93000a" },
+  limpeza: { bg: "#dee8ff", fg: "#006c49" },
+  mercearia: { bg: "#e7eeff", fg: "#3d4a41" },
+  outros: { bg: "#e7eeff", fg: "#3d4a41" },
+} as const;
