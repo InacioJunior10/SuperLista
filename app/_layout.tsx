@@ -9,8 +9,8 @@ import {
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
 
+import { DatabaseGate } from "@/features/lists/DatabaseGate";
 import { colors } from "@/theme";
 
 SplashScreen.preventAutoHideAsync();
@@ -24,20 +24,16 @@ export default function RootLayout() {
     PlusJakartaSans_800ExtraBold,
   });
 
-  useEffect(() => {
-    if (loaded) SplashScreen.hideAsync();
-  }, [loaded]);
-
   if (!loaded) return null;
 
   return (
-    <>
+    <DatabaseGate onSettled={() => void SplashScreen.hideAsync()}>
       <StatusBar style="dark" />
       <Stack
         screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.canvas } }}
       >
-        <Stack.Screen name="index" />
+        <Stack.Screen name="(tabs)" />
       </Stack>
-    </>
+    </DatabaseGate>
   );
 }
