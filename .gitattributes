@@ -1,6 +1,9 @@
 * text=auto
 *.ps1 text eol=crlf
 *.sh text eol=lf
+# Shims dos hooks (sem extensão) precisam de LF para o sh do Git for Windows
+.githooks/prepare-commit-msg text eol=lf
+.githooks/commit-msg text eol=lf
 *.png binary
 *.jpg binary
 *.ttf binary

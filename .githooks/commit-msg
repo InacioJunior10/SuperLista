@@ -1,0 +1,6 @@
+#!/bin/sh
+# Shim exigido pelo git (hooks são executados pelo sh do Git for Windows).
+# Toda a lógica está em PowerShell: commit-msg.ps1.
+dir="$(dirname "$0")"
+if command -v pwsh >/dev/null 2>&1; then ps=pwsh; else ps=powershell.exe; fi
+exec "$ps" -NoProfile -ExecutionPolicy Bypass -File "$dir/commit-msg.ps1" "$@"
