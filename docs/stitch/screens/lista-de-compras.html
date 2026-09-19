@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'tertiary': '#006c49', 'secondary': '#7c5800', 'primary-fixed-dim': '#59de9b', 'error': '#ba1a1a', 'primary': '#006d43', 'tertiary-fixed-dim': '#4edea3', 'secondary-fixed-dim': '#ffba20', 'background': '#f9f9ff', 'surface-container': '#e7eeff', 'inverse-surface': '#263143', 'primary-fixed': '#78fbb6', 'surface-variant': '#d8e3fb', 'on-secondary': '#ffffff', 'on-tertiary-fixed-variant': '#005236', 'primary-container': '#00a86b', 'surface-dim': '#cfdaf2', 'on-error-container': '#93000a', 'on-tertiary-container': '#003320', 'surface-tint': '#006d43', 'on-primary-fixed-variant': '#005232', 'on-surface': '#111c2d', 'on-tertiary-fixed': '#002113', 'on-background': '#111c2d', 'surface-container-highest': '#d8e3fb', 'secondary-fixed': '#ffdea8', 'surface': '#f9f9ff', 'secondary-container': '#feb700', 'inverse-on-surface': '#ecf1ff', 'outline': '#6d7a70', 'surface-container-lowest': '#ffffff', 'tertiary-fixed': '#6ffbbe', 'surface-container-high': '#dee8ff', 'on-error': '#ffffff', 'surface-container-low': '#f0f3ff', 'on-secondary-fixed-variant': '#5e4200', 'on-secondary-container': '#6b4b00', 'tertiary-container': '#00a773', 'outline-variant': '#bccabe', 'error-container': '#ffdad6', 'on-secondary-fixed': '#271900', 'on-tertiary': '#ffffff', 'on-primary-fixed': '#002111', 'on-primary': '#ffffff', 'inverse-primary': '#59de9b', 'surface-bright': '#f9f9ff', 'on-primary-container': '#00331d', 'on-surface-variant': '#3d4a41' }, borderRadius: { 'DEFAULT': '0.25rem', 'lg': '0.5rem', 'xl': '0.75rem', 'full': '9999px' }, spacing: { 'gutter': '1rem', 'space-sm': '0.5rem', 'margin-desktop': '2rem', 'space-xs': '0.25rem', 'margin': '1rem', 'space-lg': '1.25rem', 'space-xl': '2rem', 'space-md': '0.75rem' }, fontFamily: { 'headline-lg': ['Plus Jakarta Sans'], 'body-md': ['Plus Jakarta Sans'], 'label-lg': ['Plus Jakarta Sans'], 'label-md': ['Plus Jakarta Sans'], 'headline-md': ['Plus Jakarta Sans'], 'body-sm': ['Plus Jakarta Sans'], 'headline-lg-mobile': ['Plus Jakarta Sans'], 'headline-sm': ['Plus Jakarta Sans'], 'display': ['Plus Jakarta Sans'], 'currency-display': ['Plus Jakarta Sans'], 'body-lg': ['Plus Jakarta Sans'], 'label-sm': ['Plus Jakarta Sans'] }, fontSize: { 'headline-lg': ['28px', { lineHeight: '36px', fontWeight: '700' }], 'body-md': ['14px', { lineHeight: '20px', fontWeight: '400' }], 'label-lg': ['14px', { lineHeight: '20px', fontWeight: '700' }], 'label-md': ['12px', { lineHeight: '16px', fontWeight: '600' }], 'headline-md': ['20px', { lineHeight: '28px', fontWeight: '600' }], 'body-sm': ['12px', { lineHeight: '16px', fontWeight: '400' }], 'headline-lg-mobile': ['24px', { lineHeight: '32px', fontWeight: '700' }], 'headline-sm': ['18px', { lineHeight: '24px', fontWeight: '600' }], 'display': ['36px', { lineHeight: '44px', fontWeight: '800' }], 'currency-display': ['24px', { lineHeight: '32px', fontWeight: '800' }], 'body-lg': ['16px', { lineHeight: '24px', fontWeight: '500' }], 'label-sm': ['10px', { lineHeight: '12px', fontWeight: '700' }] } } } };</script><style>@layer base { html, body { width: 100vw; margin: 0; padding: 0; } body { overscroll-behavior: none; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="SuperLista Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WBK--PkHuDas-rJql_Ld4Av5s7IqYOJoeuoWp52jVat9ORsrF4AfPBIBTlLC1exYva1j1zn149dD3QhccMyh-wK7K4nZ_QwncKD0TmgFbLgqRdBLptGRBGyrL9-8syMoxYhOwapNdGnhBTYtfGtoax-4T-9ETVSTxwRDhvx-gZtfQ1wvPhafBbm6-FAHXxbMwii2ABLM6aJRrDRuKllzTCxAST0uoTDrHmTQ9pyN_lDoaGt6nLSaLtjIo"/><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="text-on-surface font-headline-sm text-headline-sm">SuperLista</span><span class="text-on-surface-variant font-label-md text-label-md">•</span><span class="text-primary font-label-lg text-label-lg">Minha Lista</span></div><span class="text-on-surface-variant font-body-sm text-body-sm truncate max-w-[200px]">Pão de Açúcar • Hoje</span></div></div><div class="flex items-center gap-space-xs"><button class="w-11 h-11 flex items-center justify-center rounded-full hover:bg-surface-variant/40 text-on-surface transition-colors"><span class="material-symbols-outlined text-[22px]">store</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-28 bg-surface"><div class="flex flex-col w-full px-margin pb-10 gap-space-lg">
+<!-- Resumo Geral / Budget & Progresso -->
+<section class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md mt-space-sm">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="text-on-surface-variant font-label-md text-label-md">Total Estimado no Carrinho</span>
+<div class="flex items-baseline gap-space-xs">
+<span class="text-primary font-headline-sm text-headline-sm">R$</span>
+<span class="text-primary font-display text-display" id="display-total-price">156,68</span>
+</div>
+</div>
+<div class="flex gap-space-xs">
+<button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-error hover:bg-error-container/40 transition-colors" id="btn-clear-all" title="Limpar marcados">
+<span class="material-symbols-outlined text-[20px]">restart_alt</span>
+</button>
+<button class="h-10 px-space-md bg-primary text-on-primary rounded-full font-label-lg text-label-lg flex items-center gap-space-xs shadow-sm active:scale-95 transition-transform" id="btn-quick-add">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>Item</span>
+</button>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-space-xs">
+<div class="flex justify-between items-center text-on-surface-variant font-label-md text-label-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">shopping_bag</span>
+<span>Progresso dos itens</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface" id="display-items-progress">5 de 12 pegos</span>
+</div>
+<!-- Barra de progresso visual de gastos e itens -->
+<div class="w-full bg-surface-variant h-2.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-300" id="progress-bar-fill" style="width: 41.6%;"></div>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant font-body-sm text-body-sm pt-0.5">
+<span id="display-pending-count">7 itens pendentes na gôndola</span>
+<span class="text-secondary font-label-md text-label-md">Meta: R$ 200,00</span>
+</div>
+</div>
+</section>
+<!-- Filtro Rápido de Aisle / Corredores -->
+<div class="flex items-center gap-space-xs overflow-x-auto no-scrollbar py-0.5 -mx-margin px-margin">
+<button class="bg-primary text-on-primary rounded-full px-space-md py-1.5 font-label-md text-label-md whitespace-nowrap shadow-sm">Todos (12)</button>
+<button class="bg-surface-container-lowest text-on-surface-variant rounded-full px-space-md py-1.5 font-label-md text-label-md whitespace-nowrap shadow-sm hover:bg-surface-container">Hortifrúti</button>
+<button class="bg-surface-container-lowest text-on-surface-variant rounded-full px-space-md py-1.5 font-label-md text-label-md whitespace-nowrap shadow-sm hover:bg-surface-container">Laticínios</button>
+<button class="bg-surface-container-lowest text-on-surface-variant rounded-full px-space-md py-1.5 font-label-md text-label-md whitespace-nowrap shadow-sm hover:bg-surface-container">Padaria</button>
+<button class="bg-surface-container-lowest text-on-surface-variant rounded-full px-space-md py-1.5 font-label-md text-label-md whitespace-nowrap shadow-sm hover:bg-surface-container">Carnes</button>
+<button class="bg-surface-container-lowest text-on-surface-variant rounded-full px-space-md py-1.5 font-label-md text-label-md whitespace-nowrap shadow-sm hover:bg-surface-container">Limpeza</button>
+</div>
+<!-- Lista de Compras Agrupada -->
+<div class="flex flex-col gap-space-lg" id="shopping-list-container">
+<!-- Categoria: Hortifruti & Feira -->
+<section class="flex flex-col gap-space-sm" data-category="hortifruti">
+<div class="flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed-variant">
+<span class="material-symbols-outlined text-[18px]">nutrition</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Hortifrúti &amp; Feira</h2>
+</div>
+<span class="text-on-surface-variant font-label-md text-label-md category-counter">3 itens</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<!-- Item 1 -->
+<article class="item-card bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm transition-all duration-200" data-checked="true" data-item-id="item-1" data-name="Maçã Fuji" data-price="9.90" data-qty="1" data-unit="1kg">
+<div class="flex items-center gap-space-md min-w-0">
+<button class="checkbox-btn w-6 h-6 rounded-full bg-primary flex items-center justify-center text-on-primary flex-shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<div class="flex flex-col min-w-0">
+<span class="item-name font-body-lg text-body-lg text-on-surface-variant line-through truncate font-medium">Maçã Fuji</span>
+<span class="item-meta font-body-sm text-body-sm text-outline truncate">1 kg • 1 un</span>
+</div>
+</div>
+<button class="price-edit-trigger flex items-center gap-1.5 bg-surface-container px-space-sm py-1.5 rounded-lg active:scale-95 transition-transform flex-shrink-0" type="button">
+<span class="item-price-display font-label-lg text-label-lg text-primary">R$ 9,90</span>
+<span class="material-symbols-outlined text-outline text-[16px]">edit</span>
+</button>
+</article>
+<!-- Item 2 -->
+<article class="item-card bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm transition-all duration-200" data-checked="true" data-item-id="item-2" data-name="Banana Prata" data-price="6.50" data-qty="1" data-unit="1 cacho">
+<div class="flex items-center gap-space-md min-w-0">
+<button class="checkbox-btn w-6 h-6 rounded-full bg-primary flex items-center justify-center text-on-primary flex-shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<div class="flex flex-col min-w-0">
+<span class="item-name font-body-lg text-body-lg text-on-surface-variant line-through truncate font-medium">Banana Prata</span>
+<span class="item-meta font-body-sm text-body-sm text-outline truncate">1 cacho • 1 un</span>
+</div>
+</div>
+<button class="price-edit-trigger flex items-center gap-1.5 bg-surface-container px-space-sm py-1.5 rounded-lg active:scale-95 transition-transform flex-shrink-0" type="button">
+<span class="item-price-display font-label-lg text-label-lg text-primary">R$ 6,50</span>
+<span class="material-symbols-outlined text-outline text-[16px]">edit</span>
+</button>
+</article>
+<!-- Item 3 -->
+<article class="item-card bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm transition-all duration-200" data-checked="false" data-item-id="item-3" data-name="Tomate Italiano" data-price="8.20" data-qty="1" data-unit="800g">
+<div class="flex items-center gap-space-md min-w-0">
+<button class="checkbox-btn w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-transparent flex-shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<div class="flex flex-col min-w-0">
+<span class="item-name font-body-lg text-body-lg text-on-surface truncate font-semibold">Tomate Italiano</span>
+<span class="item-meta font-body-sm text-body-sm text-on-surface-variant truncate">800g • 1 un</span>
+</div>
+</div>
+<button class="price-edit-trigger flex items-center gap-1.5 bg-surface-container-low px-space-sm py-1.5 rounded-lg active:scale-95 transition-transform flex-shrink-0" type="button">
+<span class="item-price-display font-label-lg text-label-lg text-primary">R$ 8,20</span>
+<span class="material-symbols-outlined text-outline text-[16px]">edit</span>
+</button>
+</article>
+</div>
+</section>
+<!-- Categoria: Laticínios & Frios -->
+<section class="flex flex-col gap-space-sm" data-category="laticinios">
+<div class="flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
+<span class="material-symbols-outlined text-[18px]">egg_alt</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Laticínios &amp; Frios</h2>
+</div>
+<span class="text-on-surface-variant font-label-md text-label-md category-counter">3 itens</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<!-- Item 4 -->
+<article class="item-card bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm transition-all duration-200" data-checked="true" data-item-id="item-4" data-name="Queijo Muçarela Fatiado" data-price="14.90" data-qty="1" data-unit="300g">
+<div class="flex items-center gap-space-md min-w-0">
+<button class="checkbox-btn w-6 h-6 rounded-full bg-primary flex items-center justify-center text-on-primary flex-shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<div class="flex flex-col min-w-0">
+<span class="item-name font-body-lg text-body-lg text-on-surface-variant line-through truncate font-medium">Queijo Muçarela Fatiado</span>
+<span class="item-meta font-body-sm text-body-sm text-outline truncate">300g • 1 un</span>
+</div>
+</div>
+<button class="price-edit-trigger flex items-center gap-1.5 bg-surface-container px-space-sm py-1.5 rounded-lg active:scale-95 transition-transform flex-shrink-0" type="button">
+<span class="item-price-display font-label-lg text-label-lg text-primary">R$ 14,90</span>
+<span class="material-symbols-outlined text-outline text-[16px]">edit</span>
+</button>
+</article>
+<!-- Item 5 -->
+<article class="item-card bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm transition-all duration-200" data-checked="false" data-item-id="item-5" data-name="Leite Integral Tipo A" data-price="4.89" data-qty="2" data-unit="1L">
+<div class="flex items-center gap-space-md min-w-0">
+<button class="checkbox-btn w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-transparent flex-shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<div class="flex flex-col min-w-0">
+<span class="item-name font-body-lg text-body-lg text-on-surface truncate font-semibold">Leite Integral Tipo A</span>
+<span class="item-meta font-body-sm text-body-sm text-on-surface-variant truncate">1L • 2 un</span>
+</div>
+</div>
+<button class="price-edit-trigger flex items-center gap-1.5 bg-surface-container-low px-space-sm py-1.5 rounded-lg active:scale-95 transition-transform flex-shrink-0" type="button">
+<span class="item-price-display font-label-lg text-label-lg text-primary">R$ 9,78</span>
+<span class="material-symbols-outlined text-outline text-[16px]">edit</span>
+</button>
+</article>
+<!-- Item 6 -->
+<article class="item-card bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm transition-all duration-200" data-checked="false" data-item-id="item-6" data-name="Iogurte Natural Integral" data-price="0.00" data-qty="2" data-unit="170g">
+<div class="flex items-center gap-space-md min-w-0">
+<button class="checkbox-btn w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-transparent flex-shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<div class="flex flex-col min-w-0">
+<span class="item-name font-body-lg text-body-lg text-on-surface truncate font-semibold">Iogurte Natural Integral</span>
+<span class="item-meta font-body-sm text-body-sm text-on-surface-variant truncate">170g • 2 un</span>
+</div>
+</div>
+<button class="price-edit-trigger flex items-center gap-1 bg-secondary-fixed/50 px-space-sm py-1.5 rounded-lg active:scale-95 transition-transform flex-shrink-0" type="button">
+<span class="material-symbols-outlined text-secondary text-[16px]">sell</span>
+<span class="item-price-display font-label-md text-label-md text-secondary">Definir preço</span>
+</button>
+</article>
+</div>
+</section>
+<!-- Categoria: Padaria & Matinais -->
+<section class="flex flex-col gap-space-sm" data-category="padaria">
+<div class="flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">bakery_dining</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Padaria &amp; Matinais</h2>
+</div>
+<span class="text-on-surface-variant font-label-md text-label-md category-counter">2 itens</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<!-- Item 7 -->
+<article class="item-card bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm transition-all duration-200" data-checked="true" data-item-id="item-7" data-name="Pão Francês Quentinho" data-price="7.20" data-qty="1" data-unit="6 unidades">
+<div class="flex items-center gap-space-md min-w-0">
+<button class="checkbox-btn w-6 h-6 rounded-full bg-primary flex items-center justify-center text-on-primary flex-shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<div class="flex flex-col min-w-0">
+<span class="item-name font-body-lg text-body-lg text-on-surface-variant line-through truncate font-medium">Pão Francês Quentinho</span>
+<span class="item-meta font-body-sm text-body-sm text-outline truncate">6 unidades • 1 un</span>
+</div>
+</div>
+<button class="price-edit-trigger flex items-center gap-1.5 bg-surface-container px-space-sm py-1.5 rounded-lg active:scale-95 transition-transform flex-shrink-0" type="button">
+<span class="item-price-display font-label-lg text-label-lg text-primary">R$ 7,20</span>
+<span class="material-symbols-outlined text-outline text-[16px]">edit</span>
+</button>
+</article>
+<!-- Item 8 -->
+<article class="item-card bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm transition-all duration-200" data-checked="false" data-item-id="item-8" data-name="Café Torrado e Moído" data-price="18.90" data-qty="1" data-unit="500g">
+<div class="flex items-center gap-space-md min-w-0">
+<button class="checkbox-btn w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-transparent flex-shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<div class="flex flex-col min-w-0">
+<span class="item-name font-body-lg text-body-lg text-on-surface truncate font-semibold">Café Torrado e Moído</span>
+<span class="item-meta font-body-sm text-body-sm text-on-surface-variant truncate">500g Tradicional • 1 un</span>
+</div>
+</div>
+<button class="price-edit-trigger flex items-center gap-1.5 bg-surface-container-low px-space-sm py-1.5 rounded-lg active:scale-95 transition-transform flex-shrink-0" type="button">
+<span class="item-price-display font-label-lg text-label-lg text-primary">R$ 18,90</span>
+<span class="material-symbols-outlined text-outline text-[16px]">edit</span>
+</button>
+</article>
+</div>
+</section>
+<!-- Categoria: Carnes & Aves -->
+<section class="flex flex-col gap-space-sm" data-category="carnes">
+<div class="flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-error-container flex items-center justify-center text-on-error-container">
+<span class="material-symbols-outlined text-[18px]">kebab_dining</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Carnes &amp; Aves</h2>
+</div>
+<span class="text-on-surface-variant font-label-md text-label-md category-counter">2 itens</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<!-- Item 9 -->
+<article class="item-card bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm transition-all duration-200" data-checked="false" data-item-id="item-9" data-name="Filé de Peito de Frango" data-price="22.90" data-qty="1" data-unit="1kg">
+<div class="flex items-center gap-space-md min-w-0">
+<button class="checkbox-btn w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-transparent flex-shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<div class="flex flex-col min-w-0">
+<span class="item-name font-body-lg text-body-lg text-on-surface truncate font-semibold">Filé de Peito de Frango</span>
+<span class="item-meta font-body-sm text-body-sm text-on-surface-variant truncate">Bandeja 1kg • 1 un</span>
+</div>
+</div>
+<button class="price-edit-trigger flex items-center gap-1.5 bg-surface-container-low px-space-sm py-1.5 rounded-lg active:scale-95 transition-transform flex-shrink-0" type="button">
+<span class="item-price-display font-label-lg text-label-lg text-primary">R$ 22,90</span>
+<span class="material-symbols-outlined text-outline text-[16px]">edit</span>
+</button>
+</article>
+<!-- Item 10 -->
+<article class="item-card bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm transition-all duration-200" data-checked="false" data-item-id="item-10" data-name="Carne Moída Patinho" data-price="34.90" data-qty="1" data-unit="1kg">
+<div class="flex items-center gap-space-md min-w-0">
+<button class="checkbox-btn w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-transparent flex-shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<div class="flex flex-col min-w-0">
+<span class="item-name font-body-lg text-body-lg text-on-surface truncate font-semibold">Carne Moída Patinho</span>
+<span class="item-meta font-body-sm text-body-sm text-on-surface-variant truncate">Fresco moído • 1 un</span>
+</div>
+</div>
+<button class="price-edit-trigger flex items-center gap-1.5 bg-surface-container-low px-space-sm py-1.5 rounded-lg active:scale-95 transition-transform flex-shrink-0" type="button">
+<span class="item-price-display font-label-lg text-label-lg text-primary">R$ 34,90</span>
+<span class="material-symbols-outlined text-outline text-[16px]">edit</span>
+</button>
+</article>
+</div>
+</section>
+<!-- Categoria: Limpeza & Higiene -->
+<section class="flex flex-col gap-space-sm" data-category="limpeza">
+<div class="flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[18px]">cleaning_services</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Limpeza &amp; Higiene</h2>
+</div>
+<span class="text-on-surface-variant font-label-md text-label-md category-counter">2 itens</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<!-- Item 11 -->
+<article class="item-card bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm transition-all duration-200" data-checked="true" data-item-id="item-11" data-name="Detergente Neutro" data-price="2.89" data-qty="2" data-unit="500ml">
+<div class="flex items-center gap-space-md min-w-0">
+<button class="checkbox-btn w-6 h-6 rounded-full bg-primary flex items-center justify-center text-on-primary flex-shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<div class="flex flex-col min-w-0">
+<span class="item-name font-body-lg text-body-lg text-on-surface-variant line-through truncate font-medium">Detergente Neutro</span>
+<span class="item-meta font-body-sm text-body-sm text-outline truncate">500ml • 2 un</span>
+</div>
+</div>
+<button class="price-edit-trigger flex items-center gap-1.5 bg-surface-container px-space-sm py-1.5 rounded-lg active:scale-95 transition-transform flex-shrink-0" type="button">
+<span class="item-price-display font-label-lg text-label-lg text-primary">R$ 5,78</span>
+<span class="material-symbols-outlined text-outline text-[16px]">edit</span>
+</button>
+</article>
+<!-- Item 12 -->
+<article class="item-card bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex items-center justify-between gap-space-sm transition-all duration-200" data-checked="false" data-item-id="item-12" data-name="Sabão Líquido Concentrado" data-price="29.90" data-qty="1" data-unit="2L">
+<div class="flex items-center gap-space-md min-w-0">
+<button class="checkbox-btn w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-transparent flex-shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<div class="flex flex-col min-w-0">
+<span class="item-name font-body-lg text-body-lg text-on-surface truncate font-semibold">Sabão Líquido Concentrado</span>
+<span class="item-meta font-body-sm text-body-sm text-on-surface-variant truncate">Refil 2L • 1 un</span>
+</div>
+</div>
+<button class="price-edit-trigger flex items-center gap-1.5 bg-surface-container-low px-space-sm py-1.5 rounded-lg active:scale-95 transition-transform flex-shrink-0" type="button">
+<span class="item-price-display font-label-lg text-label-lg text-primary">R$ 29,90</span>
+<span class="material-symbols-outlined text-outline text-[16px]">edit</span>
+</button>
+</article>
+</div>
+</section>
+</div>
+<!-- Dica de Conforto Doméstico -->
+<div class="bg-surface-container-high rounded-xl p-space-md flex items-center gap-space-sm text-on-surface">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed-variant flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">lightbulb</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg">Dica do SuperLista</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Toque em qualquer valor para informar o preço do produto na gôndola e ter a soma real no caixa.</p>
+</div>
+</div>
+<!-- MODAL INTERATIVO DE PREÇO (Bottom Sheet Móvel) -->
+<div aria-labelledby="modal-title" aria-modal="true" class="fixed inset-0 z-50 flex items-end justify-center hidden" id="price-modal" role="dialog">
+<!-- Backdrop com blur sutil -->
+<div class="fixed inset-0 bg-inverse-surface/40 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop"></div>
+<!-- Sheet Container -->
+<div class="relative w-full max-w-lg bg-surface-container-lowest rounded-t-[28px] p-space-lg shadow-xl z-10 flex flex-col gap-space-md transform translate-y-full transition-transform duration-300 ease-out" id="modal-panel">
+<!-- Puxador de arraste visual -->
+<div class="w-12 h-1.5 bg-surface-variant rounded-full mx-auto -mt-1 mb-1"></div>
+<!-- Header do Modal -->
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Ajuste na Gôndola</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface" id="modal-title">Informar Preço do Item</h3>
+</div>
+<button class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-variant" id="btn-close-modal-x" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Detalhes do Item Selecionado -->
+<div class="bg-surface-container-low rounded-xl p-space-sm flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-primary-fixed flex items-center justify-center text-on-primary-fixed-variant">
+<span class="material-symbols-outlined text-[22px]">shopping_cart</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate" id="modal-item-name">Maçã Fuji</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate" id="modal-item-unit">Embalagem 1kg</span>
+</div>
+</div>
+<!-- Input de Preço Estilo Caixa com Máscara BRL -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface-variant" for="modal-input-price">Preço unitário ou por peso</label>
+<div class="relative flex items-center bg-surface-container-lowest rounded-xl px-space-md py-space-sm shadow-sm">
+<span class="font-currency-display text-currency-display text-primary mr-1">R$</span>
+<input class="w-full font-currency-display text-currency-display text-on-surface bg-transparent focus:outline-none placeholder-outline-variant" id="modal-input-price" inputmode="numeric" placeholder="0,00" type="text" value="9,90"/>
+</div>
+<span class="text-outline font-body-sm text-body-sm px-1">Digite apenas números; a pontuação é automática.</span>
+</div>
+<!-- Seletor de Quantidade -->
+<div class="flex items-center justify-between bg-surface-container-low rounded-xl p-space-sm">
+<span class="font-label-lg text-label-lg text-on-surface">Quantidade</span>
+<div class="flex items-center gap-space-sm bg-surface-container-lowest rounded-lg p-1 shadow-sm">
+<button class="w-8 h-8 rounded-md bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-variant active:scale-95 transition-transform" id="modal-qty-minus" type="button">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="font-label-lg text-label-lg text-on-surface min-w-[28px] text-center" id="modal-qty-value">1</span>
+<button class="w-8 h-8 rounded-md bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-variant active:scale-95 transition-transform" id="modal-qty-plus" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+<!-- Total Calculado do Item -->
+<div class="flex justify-between items-baseline px-space-xs pt-1">
+<span class="font-body-md text-body-md text-on-surface-variant">Subtotal deste item:</span>
+<span class="font-headline-sm text-headline-sm text-primary" id="modal-subtotal-value">R$ 9,90</span>
+</div>
+<!-- Rodapé de Ações do Modal -->
+<div class="flex items-center gap-space-sm pt-space-xs">
+<button class="flex-1 py-3 px-space-md rounded-xl bg-surface-container text-on-surface font-label-lg text-label-lg hover:bg-surface-container-high active:scale-95 transition-transform" id="modal-btn-cancel" type="button">
+          Sair
+        </button>
+<button class="flex-1 py-3 px-space-md rounded-xl bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm hover:brightness-105 active:scale-95 transition-transform flex items-center justify-center gap-space-xs" id="modal-btn-save" type="button">
+<span class="material-symbols-outlined text-[20px]">check</span>
+<span>Salvar Preço</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Lógica Client-side para Cálculos, Máscara BRL e Microinterações -->
+<script>
+  (function() {
+    let currentItemId = null;
+    let currentItemQty = 1;
+
+    // Elementos do Modal
+    const modal = document.getElementById('price-modal');
+    const modalBackdrop = document.getElementById('modal-backdrop');
+    const modalPanel = document.getElementById('modal-panel');
+    const modalItemName = document.getElementById('modal-item-name');
+    const modalItemUnit = document.getElementById('modal-item-unit');
+    const modalInputPrice = document.getElementById('modal-input-price');
+    const modalQtyValue = document.getElementById('modal-qty-value');
+    const modalSubtotalValue = document.getElementById('modal-subtotal-value');
+    const btnCancel = document.getElementById('modal-btn-cancel');
+    const btnSave = document.getElementById('modal-btn-save');
+    const btnCloseX = document.getElementById('btn-close-modal-x');
+    const btnQtyMinus = document.getElementById('modal-qty-minus');
+    const btnQtyPlus = document.getElementById('modal-qty-plus');
+
+    // Elementos do Topo
+    const displayTotalPrice = document.getElementById('display-total-price');
+    const displayItemsProgress = document.getElementById('display-items-progress');
+    const displayPendingCount = document.getElementById('display-pending-count');
+    const progressBarFill = document.getElementById('progress-bar-fill');
+    const btnClearAll = document.getElementById('btn-clear-all');
+    const btnQuickAdd = document.getElementById('btn-quick-add');
+
+    // Utilitário de formatação Real Brasileiro
+    function formatBRL(number) {
+      return number.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function parseBRL(stringVal) {
+      if (!stringVal) return 0;
+      const clean = stringVal.replace(/\D/g, '');
+      return (parseInt(clean || '0', 10) / 100);
+    }
+
+    function maskPriceInput(rawDigits) {
+      const clean = rawDigits.replace(/\D/g, '');
+      const val = parseInt(clean || '0', 10) / 100;
+      return formatBRL(val);
+    }
+
+    // Recalcula totais gerais da tela
+    function recalculateListState() {
+      const cards = document.querySelectorAll('.item-card');
+      let totalAmount = 0;
+      let checkedCount = 0;
+      const totalCount = cards.length;
+
+      cards.forEach(card => {
+        const isChecked = card.getAttribute('data-checked') === 'true';
+        const price = parseFloat(card.getAttribute('data-price') || '0');
+        const qty = parseInt(card.getAttribute('data-qty') || '1', 10);
+        
+        totalAmount += (price * qty);
+        if (isChecked) checkedCount++;
+      });
+
+      // Atualiza valores no DOM
+      displayTotalPrice.textContent = formatBRL(totalAmount);
+      displayItemsProgress.textContent = `${checkedCount} de ${totalCount} pegos`;
+      
+      const pendingCount = totalCount - checkedCount;
+      displayPendingCount.textContent = pendingCount === 0 
+        ? 'Todos os itens no carrinho!' 
+        : `${pendingCount} ${pendingCount === 1 ? 'item pendente' : 'itens pendentes'} na gôndola`;
+
+      const progressPercent = totalCount > 0 ? (checkedCount / totalCount) * 100 : 0;
+      progressBarFill.style.width = `${progressPercent}%`;
+    }
+
+    // Atualiza o subtotal interno do modal
+    function updateModalSubtotal() {
+      const unitPrice = parseBRL(modalInputPrice.value);
+      const subtotal = unitPrice * currentItemQty;
+      modalSubtotalValue.textContent = `R$ ${formatBRL(subtotal)}`;
+    }
+
+    // Abertura do Modal com animação suave
+    function openModalForCard(card) {
+      currentItemId = card.getAttribute('data-item-id');
+      const name = card.getAttribute('data-name');
+      const unit = card.getAttribute('data-unit');
+      const price = parseFloat(card.getAttribute('data-price') || '0');
+      currentItemQty = parseInt(card.getAttribute('data-qty') || '1', 10);
+
+      modalItemName.textContent = name;
+      modalItemUnit.textContent = unit;
+      modalInputPrice.value = formatBRL(price);
+      modalQtyValue.textContent = currentItemQty;
+
+      updateModalSubtotal();
+
+      // Transição
+      modal.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        modalBackdrop.classList.remove('opacity-0');
+        modalBackdrop.classList.add('opacity-100');
+        modalPanel.classList.remove('translate-y-full');
+        modalPanel.classList.add('translate-y-0');
+        modalInputPrice.focus();
+        modalInputPrice.select();
+      });
+    }
+
+    function closeModal() {
+      modalBackdrop.classList.remove('opacity-100');
+      modalBackdrop.classList.add('opacity-0');
+      modalPanel.classList.remove('translate-y-0');
+      modalPanel.classList.add('translate-y-full');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        currentItemId = null;
+      }, 300);
+    }
+
+    // Eventos do Modal
+    modalInputPrice.addEventListener('input', (e) => {
+      e.target.value = maskPriceInput(e.target.value);
+      updateModalSubtotal();
+    });
+
+    btnQtyMinus.addEventListener('click', () => {
+      if (currentItemQty > 1) {
+        currentItemQty--;
+        modalQtyValue.textContent = currentItemQty;
+        updateModalSubtotal();
+      }
+    });
+
+    btnQtyPlus.addEventListener('click', () => {
+      currentItemQty++;
+      modalQtyValue.textContent = currentItemQty;
+      updateModalSubtotal();
+    });
+
+    btnCancel.addEventListener('click', closeModal);
+    btnCloseX.addEventListener('click', closeModal);
+    modalBackdrop.addEventListener('click', closeModal);
+
+    // Salvar Preço e Atualizar Item na Lista
+    btnSave.addEventListener('click', () => {
+      if (!currentItemId) return;
+      const targetCard = document.querySelector(`[data-item-id="${currentItemId}"]`);
+      if (targetCard) {
+        const newUnitPrice = parseBRL(modalInputPrice.value);
+        targetCard.setAttribute('data-price', newUnitPrice.toFixed(2));
+        targetCard.setAttribute('data-qty', currentItemQty);
+
+        // Atualiza Badge de Preço do card
+        const priceDisplay = targetCard.querySelector('.item-price-display');
+        const editTriggerBtn = targetCard.querySelector('.price-edit-trigger');
+        const metaSpan = targetCard.querySelector('.item-meta');
+        const baseUnit = targetCard.getAttribute('data-unit');
+
+        metaSpan.textContent = `${baseUnit} • ${currentItemQty} un`;
+
+        const totalItemPrice = newUnitPrice * currentItemQty;
+        if (newUnitPrice > 0) {
+          priceDisplay.textContent = `R$ ${formatBRL(totalItemPrice)}`;
+          priceDisplay.className = 'item-price-display font-label-lg text-label-lg text-primary';
+          editTriggerBtn.className = 'price-edit-trigger flex items-center gap-1.5 bg-surface-container-low px-space-sm py-1.5 rounded-lg active:scale-95 transition-transform flex-shrink-0';
+        } else {
+          priceDisplay.textContent = 'Definir preço';
+          priceDisplay.className = 'item-price-display font-label-md text-label-md text-secondary';
+          editTriggerBtn.className = 'price-edit-trigger flex items-center gap-1 bg-secondary-fixed/50 px-space-sm py-1.5 rounded-lg active:scale-95 transition-transform flex-shrink-0';
+        }
+
+        recalculateListState();
+      }
+      closeModal();
+    });
+
+    // Vincular cliques nos itens e checkboxes
+    function bindCardListeners(card) {
+      const checkboxBtn = card.querySelector('.checkbox-btn');
+      const editTrigger = card.querySelector('.price-edit-trigger');
+      const nameEl = card.querySelector('.item-name');
+
+      // Alternar estado de marcado (concluído)
+      checkboxBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const currentChecked = card.getAttribute('data-checked') === 'true';
+        const newChecked = !currentChecked;
+        card.setAttribute('data-checked', newChecked ? 'true' : 'false');
+
+        if (newChecked) {
+          checkboxBtn.classList.remove('bg-surface-container', 'text-transparent');
+          checkboxBtn.classList.add('bg-primary', 'text-on-primary');
+          nameEl.classList.remove('text-on-surface', 'font-semibold');
+          nameEl.classList.add('text-on-surface-variant', 'line-through', 'font-medium');
+        } else {
+          checkboxBtn.classList.remove('bg-primary', 'text-on-primary');
+          checkboxBtn.classList.add('bg-surface-container', 'text-transparent');
+          nameEl.classList.remove('text-on-surface-variant', 'line-through', 'font-medium');
+          nameEl.classList.add('text-on-surface', 'font-semibold');
+        }
+
+        recalculateListState();
+      });
+
+      // Abrir modal de preço
+      editTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openModalForCard(card);
+      });
+
+      // Clique no corpo do card também abre o modal para facilitar o toque móvel
+      card.addEventListener('click', () => {
+        openModalForCard(card);
+      });
+    }
+
+    document.querySelectorAll('.item-card').forEach(bindCardListeners);
+
+    // Botão Limpar marcados
+    btnClearAll.addEventListener('click', () => {
+      document.querySelectorAll('.item-card').forEach(card => {
+        card.setAttribute('data-checked', 'false');
+        const checkboxBtn = card.querySelector('.checkbox-btn');
+        const nameEl = card.querySelector('.item-name');
+        checkboxBtn.classList.remove('bg-primary', 'text-on-primary');
+        checkboxBtn.classList.add('bg-surface-container', 'text-transparent');
+        nameEl.classList.remove('text-on-surface-variant', 'line-through', 'font-medium');
+        nameEl.classList.add('text-on-surface', 'font-semibold');
+      });
+      recalculateListState();
+    });
+
+    // Botão rápido adicionar item (feedback táctil)
+    btnQuickAdd.addEventListener('click', () => {
+      alert('Dica: Selecione a categoria desejada ou digite na barra para adicionar novos produtos à sua SuperLista.');
+    });
+
+    // Inicialização
+    recalculateListState();
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/85 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.05)]" data-active-classes="text-primary"><div class="flex items-center justify-around h-16 px-space-sm"><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-space-xs transition-colors text-primary" data-path="minha-lista" href="#"><span class="material-symbols-outlined text-[24px]">checklist</span><span class="font-label-sm text-label-sm">Lista</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-space-xs text-on-surface-variant hover:text-on-surface transition-colors" data-path="historico" href="#"><span class="material-symbols-outlined text-[24px]">history</span><span class="font-label-sm text-label-sm">Histórico</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-space-xs text-on-surface-variant hover:text-on-surface transition-colors" data-path="carrinho" href="#"><span class="material-symbols-outlined text-[24px]">shopping_cart</span><span class="font-label-sm text-label-sm">Carrinho</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-space-xs text-on-surface-variant hover:text-on-surface transition-colors" data-path="configuracoes" href="#"><span class="material-symbols-outlined text-[24px]">settings</span><span class="font-label-sm text-label-sm">Ajustes</span></a></div></nav></body></html>

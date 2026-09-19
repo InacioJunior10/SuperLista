@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npm run *)",
+      "PowerShell(npm test*)",
+      "PowerShell(npx expo *)",
+      "PowerShell(npx tsc *)",
+      "PowerShell(.\\scripts\\*.ps1)",
+      "PowerShell(git status*)",
+      "PowerShell(git diff*)",
+      "PowerShell(git log*)",
+      "PowerShell(git branch*)",
+      "PowerShell(git worktree list*)"
+    ],
+    "deny": [
+      "Bash(*)"
+    ]
+  }
+}

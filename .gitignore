@@ -1,0 +1,60 @@
+# Dependências
+node_modules/
+
+# Expo / Metro
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+.metro-health-check*
+
+# Pastas nativas geradas (prebuild)
+/ios
+/android
+.kotlin/
+*.orig.*
+
+# Credenciais e assinaturas — nunca versionar
+*.jks
+*.keystore
+*.p8
+*.p12
+*.key
+*.pem
+*.mobileprovision
+.env
+.env.*
+!.env.example
+google-services.json
+GoogleService-Info.plist
+
+# Logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+*.log
+
+# TypeScript / testes / cache
+*.tsbuildinfo
+coverage/
+.eslintcache
+
+# Sistema operacional / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Claude Code: arquivos locais e worktrees de agents
+.claude/settings.local.json
+.claude/worktrees/
+
+# Worktrees manuais (ficam ao lado do repositório, mas ignore caso sejam criadas dentro)
+/worktrees/
+
+# Temporários
+tmp/
+temp/
