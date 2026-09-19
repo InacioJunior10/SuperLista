@@ -76,3 +76,4 @@ Consequências: nenhuma feature da v1.0 pode depender de rede. Qualquer integra�
 ## Decisões em aberto
 
 Nenhuma no momento.
+| **Lista inicial sincronizada por revisão** (`app_meta.initial_list_revision`) | 2026-09-19 | Em atualização de revisão as listas existentes são substituídas pela lista inicial exata; edições posteriores são preservadas; para forçar nova carga, incremente `INITIAL_LIST_REVISION` |

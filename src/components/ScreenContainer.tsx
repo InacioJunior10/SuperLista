@@ -6,12 +6,12 @@ import { bottomClearance, colors, spacing } from "@/theme";
 
 export type ScreenContainerProps = {
   children?: ReactNode;
-  /** Reserva folga inferior para a barra de totais/navegação fixa. Padrão: true. */
+  /** Reserva folga inferior para a barra de totais/navegação fixa. Padrão: false (a barra de abas já ocupa o próprio espaço). */
   bottomInset?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
-export function ScreenContainer({ children, bottomInset = true, style }: ScreenContainerProps) {
+export function ScreenContainer({ children, bottomInset = false, style }: ScreenContainerProps) {
   return (
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <View

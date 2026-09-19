@@ -114,6 +114,11 @@ export const MIGRATIONS: readonly Migration[] = [
       ALTER TABLE products_new RENAME TO products;
     `,
   },
+  {
+    // Metadados do app (ex.: revisão da lista inicial já sincronizada).
+    version: 6,
+    sql: `CREATE TABLE app_meta (key TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL);`,
+  },
 ];
 
 /** Aplica as migrações pendentes usando PRAGMA user_version. Idempotente. */

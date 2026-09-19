@@ -144,6 +144,6 @@ describe("Card, Icon, MoneyText, ScreenContainer", () => {
       </ScreenContainer>,
     );
     expect(screen.getByText("tela")).toBeTruthy();
-    expect(screen.getByTestId("screen-content")).toHaveStyle({ paddingBottom: 80 });
+    expect(screen.getByTestId("screen-content")).not.toHaveStyle({ paddingBottom: 80 });
   });
 });
