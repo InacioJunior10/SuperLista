@@ -2,7 +2,7 @@ import * as SQLite from "expo-sqlite";
 
 import { migrate } from "./migrations";
 import { createListsRepository, type ListsRepository } from "./repository";
-import { seedIfEmpty } from "./seed";
+import { syncInitialList } from "./seed";
 import type { Db, SqlParams } from "./types";
 
 export const DATABASE_NAME = "superlista.db";
@@ -42,11 +42,12 @@ export function getDb(): Promise<Db> {
   return pendingDb;
 }
 
-/** Repositório de listas. Em qualquer build, semeia a lista inicial se o banco estiver vazio. */
+/** Repositório de listas. Em qualquer build, sincroniza a lista inicial por revisão. */
 export function getListsRepository(): Promise<ListsRepository> {
   pendingLists ??= (async () => {
-    const repo = createListsRepository(await getDb());
-    await seedIfEmpty(repo);
+    const db = await getDb();
+    const repo = createListsRepository(db);
+    await syncInitialList(db, repo);
     return repo;
   })().catch((error) => {
     pendingLists = null;

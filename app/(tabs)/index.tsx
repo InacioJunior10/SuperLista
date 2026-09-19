@@ -139,7 +139,6 @@ export default function ListaScreen() {
         initialNumToRender={12}
         maxToRenderPerBatch={10}
         windowSize={7}
-        removeClippedSubviews
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}
         ListHeaderComponent={
@@ -203,5 +202,5 @@ export default function ListaScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { paddingBottom: spacing.base },
+  content: { paddingBottom: spacing.xl },
 });

@@ -100,6 +100,19 @@ describe("Tela Lista de Compras", () => {
     expect(screen.getByText("Dica da SuperLista")).toBeTruthy();
   });
 
+  it("marcar item não remonta a tela nem o cabeçalho", async () => {
+    await seed();
+    await renderScreen();
+    const content = screen.getByTestId("screen-content");
+    const title = screen.getByText("Compras do mês");
+    const user = userEvent.setup();
+    await user.press(screen.getByRole("checkbox", { name: "Marcar Tomate como pego no carrinho" }));
+    expect(await screen.findByText("1 de 4 pegos")).toBeTruthy();
+    expect(screen.queryByTestId("lista-carregando")).toBeNull();
+    expect(screen.getByTestId("screen-content")).toBe(content);
+    expect(screen.getByText("Compras do mês")).toBe(title);
+  });
+
   it("filtra por chip e volta com Todos", async () => {
     await seed();
     await renderScreen();

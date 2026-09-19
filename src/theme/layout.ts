@@ -27,6 +27,8 @@ export const bottomClearance = 80;
 
 // Medidas de componentes do DESIGN.md (Components).
 export const sizes = {
+  /** Altura base da barra de abas (sem a inset inferior do sistema). */
+  tabBar: hitTarget + spacing.sm,
   chipHeight: 36,
   checkbox: 24,
   checkIcon: 16,

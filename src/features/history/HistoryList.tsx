@@ -114,7 +114,6 @@ export function HistoryList({ getRepo, refreshToken = 0 }: HistoryListProps) {
       initialNumToRender={10}
       maxToRenderPerBatch={10}
       windowSize={7}
-      removeClippedSubviews
       contentContainerStyle={styles.list}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void onRefresh()} />}
       renderItem={({ item: p }) => {
@@ -198,7 +197,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   center: { flex: 1, alignItems: "center", justifyContent: "center", gap: spacing.base },
   message: { ...typography.bodyLg, color: colors.slateMuted, textAlign: "center" },
-  list: { gap: spacing.md, paddingVertical: spacing.base },
+  list: { gap: spacing.md, paddingTop: spacing.base, paddingBottom: spacing.xl },
   card: { padding: 0, overflow: "hidden" },
   cardHead: { flexDirection: "row", alignItems: "center", gap: spacing.md, padding: spacing.base, minHeight: hitTarget },
   title: { ...typography.labelLg, color: colors.slate },

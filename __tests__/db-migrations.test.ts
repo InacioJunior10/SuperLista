@@ -15,7 +15,7 @@ describe("migrações", () => {
     expect(version).toBe(MIGRATIONS[MIGRATIONS.length - 1].version);
     const tables = await db.getAllAsync<{ name: string }>("SELECT name FROM sqlite_master WHERE type = 'table'");
     const names = tables.map((t) => t.name);
-    for (const t of ["lists", "items", "purchases", "purchase_items", "products"]) expect(names).toContain(t);
+    for (const t of ["lists", "items", "purchases", "purchase_items", "products", "app_meta"]) expect(names).toContain(t);
     db.close();
   });
 
@@ -64,7 +64,7 @@ describe("migrações", () => {
       db.runAsync("INSERT INTO items (id, list_id, name, unit) VALUES ('x', 'l1', 'Presunto', 'g')"),
     ).rejects.toThrow();
 
-    expect(await migrate(db)).toBe(5);
+    expect(await migrate(db, MIGRATIONS.slice(0, 5))).toBe(5);
 
     const items = await db.getAllAsync<{ name: string; quantity: number; unit_price_cents: number; checked: number }>(
       "SELECT * FROM items",
