@@ -35,12 +35,19 @@ Cada fase é **uma branch + uma worktree** e termina com `.\scripts\check.ps1` v
 - **Definição de pronto (DoD):** `.\scripts\check.ps1` verde · critérios de aceite da fase atendidos · sem `console.log` · `docs/memory/` atualizado · commits Conventional Commits em português.
 - **Ao delegar a um agent:** informar branch, escopo de arquivos, RF-xx e o DoD. Fases paralelas não devem tocar os mesmos arquivos (veja "Escopo" em cada fase).
 
+## Decisões tomadas
+
+| Decisão | Data | Efeito |
+|---|---|---|
+| **Somente app mobile** (Android/iOS); sem versão web | 2026-09-19 | Removidos script `web` e config web; nada de Metro/wasm para SQLite |
+| **Todos os dados no dispositivo** (SQLite); **sem API, backend ou nuvem** por enquanto | 2026-09-19 | NFR "sincronização em segundo plano" adiado (fora do escopo da v1.0); sem chamadas de rede; sem contas/login |
+
+Consequências: nenhuma feature da v1.0 pode depender de rede. Qualquer integração online futura exige nova decisão registrada aqui e em `docs/memory/`.
+
 ## Decisões em aberto (resolver antes da fase indicada)
 
 | Decisão | Fase | Observação |
 |---|---|---|
-| Suporte a **web** com `expo-sqlite` (exige config do Metro/wasm) ou app só mobile | 3 | Hoje o README cita `w` para web; ajustar conforme decisão |
-| **Sincronização em segundo plano** (NFR "Offline First") não tem backend definido | 7 | Definir backend (ex.: Supabase/Firebase) ou adiar; até lá, 100% local |
 | Múltiplas listas e criação de nova lista (PRD mostra só uma lista ativa) | 6 | Definir UX (seletor no header?) |
 | Mercado selecionado: texto livre ou cadastro | 6 | PRD: "Pão de Açúcar • Hoje" |
 | Ícones: Material Symbols do Stitch → `@expo/vector-icons` | 2 | Mapear cada ícone usado nas telas |

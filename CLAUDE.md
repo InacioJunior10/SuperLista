@@ -13,7 +13,8 @@ Projeto Stitch: "Lista de Compras Inteligente" (`projects/7386463549503504126`),
 Regras de produto/design:
 - Toda UI usa os tokens de `@/theme` (`colors`, `typography`, `spacing`, `radius`, `elevation`); **sem cores, tamanhos ou fontes soltos**. Fonte: Plus Jakarta Sans. Cor primária `#00A86B`. Somente modo claro.
 - **Dinheiro é sempre inteiro em centavos**; exiba com `formatBRL` (`@/utils/money`), padrão `R$ 0,00`, algarismos tabulares.
-- Offline-first: fluxo principal sem internet (persistência local em `src/db`, `expo-sqlite`).
+- **Escopo de plataforma (decidido em 2026-09-19): somente app mobile (Android/iOS), sem versão web.** Não adicione `react-native-web`, script `web` nem config web.
+- **Todos os dados ficam no dispositivo (SQLite, `src/db`). Não há API, backend, nuvem, login nem sincronização** por enquanto: não crie chamadas de rede (`fetch`/axios/SDKs de backend) nem serviços online, e não adicione dependências para isso. Qualquer mudança nisso exige decisão explícita do usuário, registrada em `docs/plan/README.md` e `docs/memory/`. O app funciona 100% offline.
 - Banco: acesse só via `getListsRepository()` (`@/db`); nunca escreva SQL fora de `src/db`. Mudança de schema = **nova migração** em `migrations.ts` (`version + 1`), jamais editar uma existente. Testes de banco usam `createTestDb()` de `test-utils/`.
 - Textos da UI em pt-BR, idênticos ao PRD (ex.: "Salvar Preço", "Marcar como pego no carrinho").
 - Alvos de toque ≥ 48px; `accessibilityRole`/`accessibilityLabel` em elementos interativos.
@@ -63,7 +64,6 @@ Ao final de **cada sessão de trabalho**, crie (ou atualize, se for a mesma sess
 | Instalar deps | `npm install` |
 | Iniciar dev server | `npm start` |
 | Android (emulador/dispositivo) | `npm run android` |
-| Web | `npm run web` |
 | Typecheck | `npm run typecheck` |
 | Lint | `npm run lint` |
 | Testes | `npm test` |
@@ -98,7 +98,7 @@ Alias de import: `@/*` → `src/*` (ex.: `import { colors } from "@/theme/colors
 
 - TypeScript `strict`. Evite `any`; tipos de domínio em `src/types`.
 - Componentes funcionais com hooks; um componente por arquivo, nome em PascalCase; hooks começam com `use`.
-- Estilos via `StyleSheet.create` e tokens de `src/theme`. Suporte a tema claro/escuro (`userInterfaceStyle: automatic`).
+- Estilos via `StyleSheet.create` e tokens de `src/theme`. Somente tema claro (`userInterfaceStyle: light`), conforme o design system.
 - Telas em `app/` devem apenas compor componentes de `src/`; lógica fica em hooks/features.
 - Listas longas: `FlatList`/`FlashList`, nunca `ScrollView` com `.map`.
 - Navegação tipada (`typedRoutes` ativo); use `Link`/`router` do `expo-router`.
