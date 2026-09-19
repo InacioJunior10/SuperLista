@@ -44,7 +44,7 @@ const withProvider = (ui: React.ReactElement) => <ListsProvider repository={repo
 describe("auditoria de acessibilidade", () => {
   it("Lista, com os sheets de item, meta e info", async () => {
     await render(withProvider(<ListaScreen />));
-    await screen.findByText("Total da lista");
+    await screen.findByText("Total estimado no carrinho");
     expectAllLabelled();
     const user = userEvent.setup();
 

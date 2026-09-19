@@ -41,7 +41,11 @@ export function parseQuantity(text: string, unit: Unit): number {
 }
 
 const quantityText = (item?: ShoppingItem) =>
-  !item ? "1" : item.unit === "kg" ? String(item.quantity / 1000).replace(".", ",") : String(item.quantity);
+  !item
+    ? "1"
+    : item.unit === "kg"
+      ? String(item.quantity / 1000).replace(".", ",")
+      : String(item.quantity);
 
 function Form({ item, onClose, onSubmit }: Omit<AddItemSheetProps, "visible">) {
   const [name, setName] = useState(item?.name ?? "");
@@ -65,7 +69,9 @@ function Form({ item, onClose, onSubmit }: Omit<AddItemSheetProps, "visible">) {
     setIsNew(!found);
     if (!found) return;
     setName(found.name);
-    setCategory(CATEGORIES.some((c) => c.key === found.category) ? (found.category as Category) : "outros");
+    setCategory(
+      CATEGORIES.some((c) => c.key === found.category) ? (found.category as Category) : "outros",
+    );
     setUnit(found.unit);
     setQty(defaultQtyText(found.unit));
     setTouched(true);
@@ -138,7 +144,9 @@ function Form({ item, onClose, onSubmit }: Omit<AddItemSheetProps, "visible">) {
           />
         ))}
       </View>
-      <Text style={styles.label}>{unit === "kg" ? "Quantidade (kg)" : unit === "g" ? "Quantidade (g)" : "Quantidade"}</Text>
+      <Text style={styles.label}>
+        {unit === "kg" ? "Quantidade (kg)" : unit === "g" ? "Quantidade (g)" : "Quantidade"}
+      </Text>
       <TextInput
         value={qty}
         onChangeText={setQty}

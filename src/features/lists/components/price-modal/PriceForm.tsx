@@ -166,10 +166,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.base,
     fontVariant: ["tabular-nums"],
   },
-  rowBetween: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: spacing.md },
+  rowBetween: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: spacing.md,
+  },
   chips: { flexDirection: "row", flexWrap: "wrap", gap: spacing.sm },
   footer: { flexDirection: "row", gap: spacing.md, padding: spacing.base },
   footerBtn: { flex: 1 },
 });
-
-

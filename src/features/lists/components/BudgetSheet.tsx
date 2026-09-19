@@ -31,7 +31,12 @@ function Form({ budgetCents, onClose, onSave }: Omit<BudgetSheetProps, "visible"
       />
       <View style={styles.row}>
         <Button label="Cancelar" variant="tertiary" onPress={onClose} style={styles.flex} />
-        <Button label="Salvar" onPress={() => onSave(cents)} disabled={cents <= 0} style={styles.flex} />
+        <Button
+          label="Salvar"
+          onPress={() => onSave(cents)}
+          disabled={cents <= 0}
+          style={styles.flex}
+        />
       </View>
       {budgetCents ? (
         <Button label="Remover meta" variant="secondary" onPress={() => onSave(null)} />

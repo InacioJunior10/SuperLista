@@ -31,7 +31,7 @@ async function renderScreen() {
       <ListaScreen />
     </ListsProvider>,
   );
-  await screen.findByText("Total da lista");
+  await screen.findByText("Total estimado no carrinho");
 }
 
 const persisted = async () => (await repo.listLists())[0];
