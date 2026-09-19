@@ -1,6 +1,6 @@
 import { StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
 
-import { colors, radius } from "@/theme";
+import { colors, radius, sizes } from "@/theme";
 
 export type ProgressLevel = "ok" | "warning" | "over";
 
@@ -12,7 +12,7 @@ export type ProgressBarProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-const BAR_HEIGHT = 8;
+const BAR_HEIGHT = sizes.progressBar;
 const PERCENT = 100;
 
 const levelColor: Record<ProgressLevel, string> = {

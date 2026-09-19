@@ -25,6 +25,21 @@ export const hitTarget = 48;
 // Folga inferior para a barra de totais / navegação fixa
 export const bottomClearance = 80;
 
+// Medidas de componentes do DESIGN.md (Components).
+export const sizes = {
+  chipHeight: 36,
+  checkbox: 24,
+  checkIcon: 16,
+  progressBar: 8,
+  iconSm: 16,
+  iconMd: 20,
+  iconLg: 24,
+} as const;
+
+/** Escala ao pressionar botões primários (feedback tátil). */
+export const pressedScale = 0.98;
+export const disabledOpacity = 0.5;
+
 export const elevation = {
   level0: {},
   level1: {

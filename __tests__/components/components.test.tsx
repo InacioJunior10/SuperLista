@@ -16,28 +16,7 @@ import {
 } from "@/components";
 import { colors } from "@/theme";
 
-jest.mock("@expo/vector-icons/MaterialCommunityIcons", () => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { Text } = require("react-native");
-  return { __esModule: true, default: ({ name }: { name: string }) => <Text>{name}</Text> };
-});
-
-jest.mock("react-native-reanimated", () => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { View } = require("react-native");
-  return {
-    __esModule: true,
-    default: { View },
-    useSharedValue: (v: number) => ({ value: v }),
-    useAnimatedStyle: (fn: () => object) => fn(),
-    withSpring: (v: number) => v,
-  };
-});
-
-jest.mock("expo-haptics", () => ({
-  impactAsync: jest.fn(() => Promise.resolve()),
-  ImpactFeedbackStyle: { Light: "light" },
-}));
+// Mocks de Reanimated, vector-icons e haptics vêm de jest.setup.tsx.
 
 describe("Button", () => {
   it("dispara onPress e expõe role/label", async () => {

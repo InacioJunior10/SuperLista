@@ -18,7 +18,7 @@ export type ShoppingItem = {
   quantity: number;
   /** Preço unitário (por un) ou por kg, em centavos. Padrão 0 (= "Definir preço" na UI); nunca ausente. */
   unitPriceCents: number;
-  /** "Pego no carrinho": entra no total (RF-01) */
+  /** "Pego no carrinho": só marca o item (contagem "N de M pegos"); não altera o total do topo */
   checked: boolean;
 };
 

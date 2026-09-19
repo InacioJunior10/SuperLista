@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from "react-native";
 
-import { colors, hitTarget, radius, spacing, typography } from "@/theme";
+import { colors, hitTarget, radius, sizes, spacing, typography } from "@/theme";
 
 import { Icon } from "./Icon";
 
@@ -16,7 +16,7 @@ export type StepperProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-const ICON_SIZE = 20;
+const ICON_SIZE = sizes.iconMd;
 
 export function Stepper({
   value,

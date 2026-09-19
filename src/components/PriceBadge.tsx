@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, type StyleProp, type ViewStyle } from "react-native";
 
-import { colors, hitTarget, radius, spacing, typography } from "@/theme";
+import { colors, hitTarget, radius, sizes, spacing, typography } from "@/theme";
 import { formatBRL } from "@/utils/money";
 
 import { Icon } from "./Icon";
@@ -12,7 +12,7 @@ export type PriceBadgeProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-const ICON_SIZE = 16;
+const ICON_SIZE = sizes.iconSm;
 
 export function PriceBadge({ cents, onPress, style }: PriceBadgeProps) {
   const hasPrice = typeof cents === "number" && cents > 0;

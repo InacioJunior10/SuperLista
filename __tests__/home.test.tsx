@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react-native";
 
-import HomeScreen from "../app/index";
+import HomeScreen from "../app/(tabs)/index";
 
 describe("HomeScreen", () => {
   it("mostra o título do app", async () => {
@@ -8,4 +8,3 @@ describe("HomeScreen", () => {
     expect(screen.getByText("SuperLista")).toBeTruthy();
   });
 });
-

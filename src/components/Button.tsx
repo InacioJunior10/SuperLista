@@ -1,6 +1,14 @@
 import { Pressable, StyleSheet, Text, type StyleProp, type ViewStyle } from "react-native";
 
-import { colors, hitTarget, radius, spacing, typography } from "@/theme";
+import {
+  colors,
+  disabledOpacity,
+  hitTarget,
+  pressedScale,
+  radius,
+  spacing,
+  typography,
+} from "@/theme";
 
 export type ButtonVariant = "primary" | "secondary" | "tertiary";
 
@@ -13,8 +21,8 @@ export type ButtonProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-const PRESSED_SCALE = 0.98;
-const DISABLED_OPACITY = 0.5;
+const PRESSED_SCALE = pressedScale;
+const DISABLED_OPACITY = disabledOpacity;
 
 export function Button({
   label,

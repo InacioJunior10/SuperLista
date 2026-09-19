@@ -4,6 +4,16 @@ Fonte: [`docs/stitch/PRD.md`](../stitch/PRD.md) · Design: [`docs/stitch/DESIGN.
 
 Cada fase é **uma branch + uma worktree** e termina com `.\scripts\check.ps1` verde, merge `--no-ff` em `main` e um registro em `docs/memory/`.
 
+## Status
+
+| Fase | Status |
+|---|---|
+| 0 Fundação | Concluída |
+| 1 Domínio e totais | Concluída |
+| 2 Componentes base | Concluída |
+| 3 Shell do app e dados | Concluída (pendência: ícone/splash em PNG a partir do logo) |
+| 4 a 9 | Pendentes — próxima: **4 Tela Lista de Compras** |
+
 ## Ordem de execução
 
 | # | Fase | Branch | Depende de | Requisitos do PRD | Paralelizável com |

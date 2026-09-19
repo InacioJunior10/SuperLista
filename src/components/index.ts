@@ -7,4 +7,4 @@ export * from "./MoneyText";
 export * from "./PriceBadge";
 export * from "./ProgressBar";
 export * from "./ScreenContainer";
-export * from "./Stepper";
+export * from "./Stepper";export * from "./ComingSoon";

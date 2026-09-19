@@ -1,6 +1,6 @@
 # Fase 3 — Shell do app e acesso aos dados
 
-**Branch:** `feature/app-shell` · **Depende de:** fase 1 · **Paralela com:** fase 2 (após 1)
+**Status:** Concluída`n`n**Branch:** `feature/app-shell` · **Depende de:** fase 1 · **Paralela com:** fase 2 (após 1)
 **PRD:** Bottom navigation (3.1), NFR offline
 
 ## Escopo (arquivos)

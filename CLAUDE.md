@@ -81,6 +81,7 @@ app/              Rotas (Expo Router). _layout.tsx = layout raiz. Somente telas 
 src/components/   Componentes reutilizáveis (UI pura)
 src/features/     Módulos por funcionalidade (ex.: lists/) com componentes, hooks e lógica
 src/hooks/        Hooks compartilhados
+jest.setup.tsx    Mocks globais de Jest (Reanimated, vector-icons, expo-haptics): testes de tela/hook não repetem esses mocks
 src/services/     Integrações externas / API
 src/db/           Persistência local (expo-sqlite): migrations.ts (PRAGMA user_version), repository.ts, seed.ts, client.ts (singleton `getListsRepository()`)
 test-utils/       Helpers de teste (sqliteTestDb.ts: SQLite real em memória via node:sqlite)
