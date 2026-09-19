@@ -12,7 +12,7 @@
 3. **`+ Item`**: sheet com nome, categoria (chips), unidade (un/kg) e quantidade; preço opcional; sugestão de categoria por palavra-chave simples (ex.: "tomate" → Hortifrúti).
 4. **Editar/remover item**: ação por deslizar ou menu; desfazer via snackbar.
 5. **Recalcular** no hero: desmarca todos os itens (com confirmação) e recomputa.
-6. **Múltiplas listas** (decisão em aberto): criar nova lista, alternar entre listas no header, renomear e excluir (com confirmação, `ON DELETE CASCADE`); definir mercado da lista.
+6. **Lista única (decidido)**: sem seletor nem criação de várias listas. Apenas editar o **título** e o **mercado** (texto livre) da lista ativa, tocando no cabeçalho.
 7. Ordenação dentro da seção: pendentes primeiro, marcados ao final (opcional, atrás de configuração).
 
 ## Testes
