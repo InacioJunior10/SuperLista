@@ -66,6 +66,19 @@ export const MIGRATIONS: readonly Migration[] = [
       CREATE INDEX idx_purchase_items_name ON purchase_items(name);
     `,
   },
+  {
+    // Catálogo local de produtos por código de barras (EAN).
+    version: 4,
+    sql: `
+      CREATE TABLE products (
+        ean        TEXT PRIMARY KEY NOT NULL,
+        name       TEXT NOT NULL,
+        category   TEXT NOT NULL DEFAULT 'outros',
+        unit       TEXT NOT NULL DEFAULT 'un' CHECK (unit IN ('kg', 'un')),
+        updated_at TEXT NOT NULL
+      );
+    `,
+  },
 ];
 
 /** Aplica as migrações pendentes usando PRAGMA user_version. Idempotente. */
