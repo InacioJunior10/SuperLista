@@ -16,8 +16,8 @@ export type ShoppingItem = {
   unit: Unit;
   /** un: quantidade de unidades; kg: peso em gramas */
   quantity: number;
-  /** Preço unitário (por un) ou por kg, em centavos. undefined = "Definir preço" */
-  unitPriceCents?: number;
+  /** Preço unitário (por un) ou por kg, em centavos. Padrão 0 (= "Definir preço" na UI); nunca ausente. */
+  unitPriceCents: number;
   /** "Pego no carrinho": entra no total (RF-01) */
   checked: boolean;
 };

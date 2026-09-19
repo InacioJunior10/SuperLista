@@ -42,6 +42,9 @@ Cada fase é **uma branch + uma worktree** e termina com `.\scripts\check.ps1` v
 | **Somente app mobile** (Android/iOS); sem versão web | 2026-09-19 | Removidos script `web` e config web; nada de Metro/wasm para SQLite |
 | **Todos os dados no dispositivo** (SQLite); **sem API, backend ou nuvem** por enquanto | 2026-09-19 | NFR "sincronização em segundo plano" adiado (fora do escopo da v1.0); sem chamadas de rede; sem contas/login |
 
+| **Total do topo = soma de todos os itens da lista** (`estimatedTotalCents`), marcados ou não; a meta é comparada com esse total | 2026-09-19 | `budgetStatus` já usa esse total; `cartTotalCents` (só marcados) fica para o checkout |
+| **Todo item tem preço, padrão 0** (`unitPriceCents: number`, nunca ausente); item com 0 mostra "Definir preço" | 2026-09-19 | Migração v2 converte NULL em 0; tocar no item abre o modal de preço e **Salvar Preço** atualiza o topo |
+
 Consequências: nenhuma feature da v1.0 pode depender de rede. Qualquer integração online futura exige nova decisão registrada aqui e em `docs/memory/`.
 
 ## Decisões em aberto (resolver antes da fase indicada)

@@ -34,8 +34,8 @@ export type NewItem = {
   unitPriceCents?: number;
   checked?: boolean;
 };
-/** `unitPriceCents: null` remove o preço ("Definir preço"). */
-export type ItemPatch = Partial<Omit<NewItem, "unitPriceCents">> & { unitPriceCents?: number | null };
+/** Para "limpar" o preço, grave `unitPriceCents: 0` (o preço nunca é nulo). */
+export type ItemPatch = Partial<NewItem>;
 
 const toItem = (row: ItemRow): ShoppingItem => ({
   id: row.id,
@@ -43,7 +43,7 @@ const toItem = (row: ItemRow): ShoppingItem => ({
   category: row.category,
   unit: row.unit,
   quantity: row.quantity,
-  unitPriceCents: row.unit_price_cents ?? undefined,
+  unitPriceCents: row.unit_price_cents ?? 0,
   checked: row.checked === 1,
 });
 
@@ -136,7 +136,7 @@ export function createListsRepository(db: Db) {
         category: input.category ?? "outros",
         unit: input.unit ?? "un",
         quantity: input.quantity ?? 1,
-        unitPriceCents: input.unitPriceCents,
+        unitPriceCents: input.unitPriceCents ?? 0,
         checked: input.checked ?? false,
       };
       await db.runAsync(
@@ -149,7 +149,7 @@ export function createListsRepository(db: Db) {
           item.category,
           item.unit,
           item.quantity,
-          item.unitPriceCents ?? null,
+          item.unitPriceCents,
           item.checked ? 1 : 0,
           last?.next ?? 0,
         ],

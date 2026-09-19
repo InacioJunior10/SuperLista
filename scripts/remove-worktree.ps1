@@ -19,7 +19,12 @@ if ((Resolve-Path $PSScriptRoot).Path.StartsWith((Resolve-Path $path).Path, [Str
 if (git -C $path status --porcelain) { throw "Há alterações não commitadas em $path. Commite ou descarte antes." }
 
 git -C $repo worktree remove $path
-if ($LASTEXITCODE -ne 0) { throw "git worktree remove falhou" }
+if ($LASTEXITCODE -ne 0) {
+    # Windows: "Filename too long" (node_modules profundo) deixa a pasta pela metade. Apaga com prefixo \\?\ e segue.
+    Write-Host "git worktree remove falhou; tentando apagar com caminho longo..." -ForegroundColor Yellow
+    Remove-Item -LiteralPath "\\?\$path" -Recurse -Force
+    if (Test-Path -LiteralPath $path) { throw "Não foi possível apagar $path" }
+}
 
 if ($DeleteBranch) {
     git -C $repo branch -d $Branch   # -d: só apaga se já estiver mesclada

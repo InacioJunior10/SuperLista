@@ -93,9 +93,14 @@ describe("PriceBadge", () => {
     await fireEvent.press(screen.getByRole("button"));
     expect(onPress).toHaveBeenCalled();
   });
-  it("variante Definir preço", async () => {
+  it("variante Definir preço quando ausente", async () => {
     await render(<PriceBadge />);
     expect(screen.getByText("Definir preço")).toBeTruthy();
+  });
+  it("variante Definir preço quando o preço é 0 (padrão)", async () => {
+    await render(<PriceBadge cents={0} />);
+    expect(screen.getByText("Definir preço")).toBeTruthy();
+    expect(screen.queryByText("R$ 0,00")).toBeNull();
   });
 });
 

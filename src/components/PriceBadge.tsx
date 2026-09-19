@@ -6,7 +6,7 @@ import { formatBRL } from "@/utils/money";
 import { Icon } from "./Icon";
 
 export type PriceBadgeProps = {
-  /** Preço em centavos; ausente/null = "Definir preço". */
+  /** Preço em centavos; 0 (padrão) ou ausente = "Definir preço". */
   cents?: number | null;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
@@ -15,7 +15,7 @@ export type PriceBadgeProps = {
 const ICON_SIZE = 16;
 
 export function PriceBadge({ cents, onPress, style }: PriceBadgeProps) {
-  const hasPrice = cents !== null && cents !== undefined;
+  const hasPrice = typeof cents === "number" && cents > 0;
   const text = hasPrice ? formatBRL(cents) : "Definir preço";
   const tint = hasPrice ? colors.slate : colors.amber;
   return (

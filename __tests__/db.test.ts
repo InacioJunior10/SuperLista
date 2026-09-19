@@ -21,6 +21,18 @@ describe("migrate", () => {
     expect(row?.user_version).toBe(latest);
   });
 
+  it("migração v2 converte preços nulos em 0", async () => {
+    const legacy = createTestDb();
+    await migrate(legacy, MIGRATIONS.slice(0, 1));
+    await legacy.runAsync("INSERT INTO lists (id, title, created_at) VALUES ('l', 'L', 'x')");
+    await legacy.runAsync("INSERT INTO items (id, list_id, name) VALUES ('i', 'l', 'Arroz')");
+    expect((await legacy.getFirstAsync<{ p: number | null }>("SELECT unit_price_cents AS p FROM items"))?.p).toBeNull();
+
+    await migrate(legacy);
+    expect((await legacy.getFirstAsync<{ p: number | null }>("SELECT unit_price_cents AS p FROM items"))?.p).toBe(0);
+    legacy.close();
+  });
+
   it("é idempotente", async () => {
     const latest = MIGRATIONS[MIGRATIONS.length - 1].version;
     await expect(migrate(db)).resolves.toBe(latest);
@@ -80,16 +92,17 @@ describe("items", () => {
     expect(list?.items[1]).toMatchObject({ category: "carnes", unit: "kg", quantity: 800 });
   });
 
-  it("define, altera e remove o preço; marca como pego", async () => {
+  it("preço começa em 0; define, altera e zera; marca como pego", async () => {
     const list = await repo.createList({ title: "L" });
     const item = await repo.addItem(list.id, { name: "Tomate", unit: "kg", quantity: 800 });
-    expect(item.unitPriceCents).toBeUndefined();
+    expect(item.unitPriceCents).toBe(0);
+    expect((await repo.getItem(item.id))?.unitPriceCents).toBe(0);
 
     const priced = await repo.updateItem(item.id, { unitPriceCents: 1025, checked: true });
     expect(priced).toMatchObject({ unitPriceCents: 1025, checked: true });
 
-    const cleared = await repo.updateItem(item.id, { unitPriceCents: null });
-    expect(cleared?.unitPriceCents).toBeUndefined();
+    const cleared = await repo.updateItem(item.id, { unitPriceCents: 0 });
+    expect(cleared?.unitPriceCents).toBe(0);
     expect(cleared?.checked).toBe(true);
   });
 
