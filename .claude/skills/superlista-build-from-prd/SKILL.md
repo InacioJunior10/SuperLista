@@ -23,13 +23,9 @@ Leia sempre: `docs/stitch/PRD.md` (requisitos), `docs/stitch/DESIGN.md` (visual)
 | NFR offline-first | persistência local com `expo-sqlite` (`src/db/`); sem dependência de rede para nada do fluxo principal |
 | NFR performance <100ms | listas com `FlatList`/`SectionList`, memoização de totais, sem trabalho pesado no render |
 
-## Fases sugeridas (implemente uma por vez, com testes)
+## Ordem de execução
 
-1. **Fundação**: tema (feito), tipos, `money`, camada `src/db` (SQLite) + repositório de listas/itens, seed de dados de exemplo.
-2. **Lista**: header, card de orçamento, chips de categoria, `SectionList` agrupada, checkbox, total ao vivo.
-3. **Modal de preço**: visor, chips de ajuste rápido, stepper kg/un, toggle "pego", salvar.
-4. **Meta de orçamento** e alerta visual; adicionar/remover itens (`+ Item`).
-5. **Abas restantes** (Histórico, Carrinho/Checkout, Ajustes) — ver "Próximos passos" do PRD (checkout, histórico com gráfico, scanner EAN via `expo-camera`).
+Siga `docs/plan/README.md` (fases 1–9 com dependências, branches, escopo e critérios de aceite; um arquivo por fase). Implemente **uma fase por vez** (ou fases paralelas indicadas, em worktrees separadas), com testes, e não pule dependências. Fase 0 (fundação: tema, tipos, `money`, `src/db`) já está concluída.
 
 ## Regras
 

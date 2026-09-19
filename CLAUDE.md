@@ -36,12 +36,16 @@ Regras de produto/design:
 Guia completo: `docs/WORKTREES.md`. Resumo das regras:
 
 - Branch principal: `main`. **Não desenvolva na worktree principal** — cada tarefa/agent usa uma worktree e uma branch própria.
-- Criar: `.\scripts\new-worktree.ps1 -Branch feat/<slug>` (cria em `..\SuperLista-worktrees\feat-<slug>` e roda `npm install`). Remover: `.\scripts\remove-worktree.ps1 -Branch feat/<slug>`.
-- Branches: `<tipo>/<slug>` com tipo em `feat|fix|chore|docs|refactor|test`. Commits em português, Conventional Commits (`feat(preco): ...`), pequenos.
+- Criar: `.\scripts\new-worktree.ps1 -Branch feature/<slug>` (cria a branch se não existir, em `..\SuperLista-worktrees\feature-<slug>`, e roda `npm install`). Remover (a partir da worktree principal): `.\scripts\remove-worktree.ps1 -Branch feature/<slug> -DeleteBranch`. Os scripts funcionam de qualquer worktree.
+- Branches: `<tipo>/<slug>` com tipo em `feature|feat|fix|chore|docs|refactor|test`. Commits em português, Conventional Commits (`feat(preco): ...`), pequenos.
 - Ao paralelizar agents, divida por escopo de arquivos disjunto; evite mexer em `package.json`, `app.json`, `src/theme/*`, `src/types/*` e `CLAUDE.md` sem necessidade.
 - Antes de concluir: `.\scripts\check.ps1` verde **dentro da worktree**. Sem `git push --force`, sem `reset --hard` em branch compartilhada.
 - Servidores Expo em paralelo usam portas diferentes (`--port 8082`).
 - Ao delegar a um agent, informe branch, escopo de arquivos, requisito do PRD (RF-xx) e critério de pronto. Para subagents use `isolation: "worktree"`.
+
+## Plano de execução (`docs/plan/`)
+
+A ordem oficial de implementação do PRD está em `docs/plan/README.md` (fases 1–9, dependências, branches, escopo de arquivos, critérios de aceite e decisões em aberto). **Siga a ordem do plano**: antes de iniciar uma fase, confira as dependências e leia o arquivo da fase. Ao concluir, marque o status no README do plano e registre em `docs/memory/`.
 
 ## Memória de sessões (`docs/memory/`) — REGRA FIXA
 
@@ -84,7 +88,7 @@ src/types/        Tipos TypeScript compartilhados
 src/utils/        Funções puras
 __tests__/        Testes (Jest + Testing Library)
 scripts/          Scripts PowerShell (check, new-worktree, remove-worktree)
-docs/             PRD/design do Stitch (docs/stitch) e guias (WORKTREES.md)
+docs/             PRD/design do Stitch (docs/stitch), plano (docs/plan), memória de sessões (docs/memory), WORKTREES.md
 .claude/skills/   Skills do Claude para este projeto
 ```
 
