@@ -17,12 +17,14 @@ import {
 import { colors } from "@/theme";
 
 jest.mock("@expo/vector-icons/MaterialCommunityIcons", () => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports\n  const { Text } = require("react-native");
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { Text } = require("react-native");
   return { __esModule: true, default: ({ name }: { name: string }) => <Text>{name}</Text> };
 });
 
 jest.mock("react-native-reanimated", () => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports\n  const { View } = require("react-native");
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require("react-native");
   return {
     __esModule: true,
     default: { View },
