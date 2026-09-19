@@ -73,6 +73,7 @@ Ao final de **cada sessão de trabalho**, crie (ou atualize, se for a mesma sess
 | Lint | `npm run lint` |
 | Testes | `npm test` |
 | Verificação completa | `.\scripts\check.ps1` |
+| Gerar APK local (teste) | `.\scripts\build-apk.ps1` (detalhes em `docs/RELEASE.md`) |
 | Instalar lib compatível com o SDK | `npx expo install <pacote>` |
 | Diagnóstico | `npx expo-doctor` |
 
