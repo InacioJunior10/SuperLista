@@ -23,19 +23,20 @@ export type AddItemSheetProps = {
 
 const DEFAULT_GRAMS = 100;
 
-/** Quantidade inicial do campo ao escolher a unidade: un 1, kg 1, g 100. */
+/** Quantidade inicial do campo ao escolher a unidade: un 1, pct 1, kg 1, g 100. */
 const defaultQtyText = (unit: Unit) => (unit === "g" ? String(DEFAULT_GRAMS) : "1");
 
 const UNIT_CHIPS = [
   { unit: "un", label: "Unidade" },
   { unit: "kg", label: "Kg" },
   { unit: "g", label: "Gramas" },
+  { unit: "pct", label: "Pacote" },
 ] as const;
 
 /** un: inteiro >= 1; g: gramas inteiros (padrão 100); kg: "0,8" -> 800 (gramas). */
 export function parseQuantity(text: string, unit: Unit): number {
   if (unit === "g") return Math.max(1, parseInt(text.replace(/\D/g, ""), 10) || DEFAULT_GRAMS);
-  if (unit === "un") return Math.max(1, parseInt(text.replace(/\D/g, ""), 10) || 1);
+  if (unit === "un" || unit === "pct") return Math.max(1, parseInt(text.replace(/\D/g, ""), 10) || 1);
   const kg = parseFloat(text.replace(",", "."));
   return Number.isFinite(kg) && kg > 0 ? Math.max(1, Math.round(kg * 1000)) : 1000;
 }

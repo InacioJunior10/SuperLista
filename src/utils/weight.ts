@@ -13,3 +13,13 @@ export function kgToGrams(kg: number): number {
 export function formatKgShort(grams: number): string {
   return `${String(gramsToKg(grams)).replace(".", ",")} kg`;
 }
+
+/** Peso (kg/g) guarda gramas; un/pct guardam contagem. */
+const isWeightUnit = (u: string) => u === "kg" || u === "g";
+
+/** Converte a quantidade ao trocar a unidade: kg↔g e un↔pct mantêm; peso→contagem 1; contagem→kg 1000; contagem→g 100. */
+export function convertQuantity(from: string, to: string, quantity: number): number {
+  const fromWeight = isWeightUnit(from);
+  if (isWeightUnit(to)) return fromWeight ? quantity : to === "kg" ? 1000 : 100;
+  return fromWeight ? 1 : quantity;
+}

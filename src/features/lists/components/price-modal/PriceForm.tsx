@@ -2,11 +2,12 @@ import { router } from "expo-router";
 import { useState } from "react";
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
-import { Button, Checkbox, Chip, Icon, MoneyText } from "@/components";
+import { Button, Checkbox, Chip, Dropdown, Icon, MoneyText, type DropdownOption } from "@/components";
 import { colors, hitTarget, radius, spacing, typography } from "@/theme";
-import type { ShoppingItem } from "@/types/list";
+import type { ShoppingItem, Unit } from "@/types/list";
 import { formatWeightG, formatWeightKg } from "@/utils/format";
 import { formatBRL, parseCents } from "@/utils/money";
+import { convertQuantity } from "@/utils/weight";
 
 import { getCategoryInfo } from "../../categories";
 import { itemTotalCents } from "../../totals";
@@ -14,26 +15,58 @@ import { WeightStepper } from "./WeightStepper";
 
 const QUICK_ADD = [50, 100, 200, 500] as const;
 const MAX_CENTS = 99_999_999;
+const MAX_NAME = 80;
+
+const UNIT_OPTIONS: readonly DropdownOption<Unit>[] = [
+  { value: "un", label: "Unidade" },
+  { value: "kg", label: "Quilo (kg)" },
+  { value: "g", label: "Gramas (g)" },
+  { value: "pct", label: "Pacote" },
+];
 
 export type PriceFormProps = {
   item: ShoppingItem;
-  onSave: (next: { priceCents: number; quantity: number; checked: boolean }) => Promise<void>;
+  onSave: (next: {
+    name: string;
+    unit: Unit;
+    priceCents: number;
+    quantity: number;
+    checked: boolean;
+  }) => Promise<void>;
 };
 
 export function PriceForm({ item, onSave }: PriceFormProps) {
+  const [name, setName] = useState(item.name);
+  const [unit, setUnit] = useState<Unit>(item.unit);
   const [priceCents, setPriceCents] = useState(item.unitPriceCents);
   const [quantity, setQuantity] = useState(item.quantity);
   const [checked, setChecked] = useState(item.checked);
 
-  const isWeight = item.unit !== "un";
+  const isWeight = unit === "kg" || unit === "g";
+  const trimmedName = name.trim();
+  const nameValid = trimmedName !== "";
   const dirty =
-    priceCents !== item.unitPriceCents || quantity !== item.quantity || checked !== item.checked;
-  const total = itemTotalCents({ ...item, unitPriceCents: priceCents, quantity });
+    name !== item.name ||
+    unit !== item.unit ||
+    priceCents !== item.unitPriceCents ||
+    quantity !== item.quantity ||
+    checked !== item.checked;
+  const total = itemTotalCents({ ...item, unit, unitPriceCents: priceCents, quantity });
   const unitPrice = formatBRL(priceCents);
-  const weightText = item.unit === "g" ? formatWeightG(quantity) : formatWeightKg(quantity);
-  const formula = isWeight
-    ? `Pesagem: ${weightText} × ${unitPrice}/kg`
-    : `${quantity} un × ${unitPrice}`;
+  const weightText = unit === "g" ? formatWeightG(quantity) : formatWeightKg(quantity);
+  const countText = unit === "pct" ? `${quantity} ${quantity === 1 ? "pacote" : "pacotes"}` : `${quantity} un`;
+  const formula = isWeight ? `Pesagem: ${weightText} × ${unitPrice}/kg` : `${countText} × ${unitPrice}`;
+  const priceLabel = isWeight ? "Preço por kg" : unit === "pct" ? "Preço por pacote" : "Preço por unidade";
+  const quantityHint = isWeight
+    ? `Bandeja com ${quantity} gramas`
+    : unit === "pct"
+      ? "Quantidade em pacotes"
+      : "Quantidade em unidades";
+
+  const changeUnit = (next: Unit) => {
+    setQuantity(convertQuantity(unit, next, quantity));
+    setUnit(next);
+  };
 
   const exit = () => {
     if (!dirty) return router.back();
@@ -44,7 +77,8 @@ export function PriceForm({ item, onSave }: PriceFormProps) {
   };
 
   const save = async () => {
-    await onSave({ priceCents, quantity, checked });
+    if (!nameValid) return;
+    await onSave({ name: trimmedName, unit, priceCents, quantity, checked });
     router.back();
   };
 
@@ -54,9 +88,6 @@ export function PriceForm({ item, onSave }: PriceFormProps) {
         <View style={styles.header}>
           <View style={styles.headerText}>
             <Text style={styles.tag}>{getCategoryInfo(item.category).label}</Text>
-            <Text style={styles.name} numberOfLines={2}>
-              {item.name}
-            </Text>
           </View>
           <Pressable
             onPress={exit}
@@ -68,13 +99,23 @@ export function PriceForm({ item, onSave }: PriceFormProps) {
           </Pressable>
         </View>
 
+        <Text style={styles.sectionLabel}>Nome do item</Text>
+        <TextInput
+          value={name}
+          onChangeText={setName}
+          maxLength={MAX_NAME}
+          accessibilityLabel="Nome do item"
+          style={[styles.input, styles.nameInput]}
+        />
+        {!nameValid && <Text style={styles.error}>Informe o nome do item.</Text>}
+
         <View style={styles.display}>
           <Text style={styles.displayLabel}>VALOR TOTAL NO PACOTE</Text>
           <MoneyText cents={total} style={styles.displayValue} />
           <Text style={styles.formula}>{formula}</Text>
         </View>
 
-        <Text style={styles.sectionLabel}>{isWeight ? "Preço por kg" : "Preço por unidade"}</Text>
+        <Text style={styles.sectionLabel}>{priceLabel}</Text>
         <TextInput
           value={unitPrice}
           onChangeText={(t) => setPriceCents(Math.min(parseCents(t), MAX_CENTS))}
@@ -97,14 +138,15 @@ export function PriceForm({ item, onSave }: PriceFormProps) {
           ))}
         </View>
 
+        <Text style={styles.sectionLabel}>Tipo de quantidade</Text>
+        <Dropdown label="Tipo de quantidade" value={unit} options={UNIT_OPTIONS} onChange={changeUnit} />
+
         <View style={styles.rowBetween}>
           <View style={styles.headerText}>
             <Text style={styles.name}>Quantidade / Peso</Text>
-            <Text style={styles.hint}>
-              {isWeight ? `Bandeja com ${quantity} gramas` : "Quantidade em unidades"}
-            </Text>
+            <Text style={styles.hint}>{quantityHint}</Text>
           </View>
-          <WeightStepper unit={item.unit} value={quantity} onChange={setQuantity} />
+          <WeightStepper unit={unit} value={quantity} onChange={setQuantity} />
         </View>
 
         <View style={styles.rowBetween}>
@@ -122,7 +164,12 @@ export function PriceForm({ item, onSave }: PriceFormProps) {
 
       <View style={styles.footer}>
         <Button variant="secondary" label="Sair" onPress={exit} style={styles.footerBtn} />
-        <Button label="Salvar Preço" onPress={() => void save()} style={styles.footerBtn} />
+        <Button
+          label="Salvar Preço"
+          onPress={() => void save()}
+          disabled={!nameValid}
+          style={styles.footerBtn}
+        />
       </View>
     </View>
   );
@@ -166,6 +213,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.base,
     fontVariant: ["tabular-nums"],
   },
+  nameInput: { ...typography.bodyLg },
+  error: { ...typography.bodySm, color: colors.error },
   rowBetween: {
     flexDirection: "row",
     alignItems: "center",

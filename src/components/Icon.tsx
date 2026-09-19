@@ -27,6 +27,8 @@ export const iconMap = {
   excluir: "trash-can-outline",
   perfil: "account",
   dica: "lightbulb-outline",
+  expandir: "chevron-down",
+  recolher: "chevron-up",
 } as const satisfies Record<string, GlyphName>;
 
 export type IconName = keyof typeof iconMap;

@@ -78,3 +78,33 @@ describe("migrações", () => {
     db.close();
   });
 });
+
+describe("migração v7 (pacote)", () => {
+  it("upgrade v6 -> v7 preserva dados, aceita pct e continua rejeitando unidade inválida", async () => {
+    const db = createTestDb();
+    expect(await migrate(db, MIGRATIONS.slice(0, 6))).toBe(6);
+    await db.runAsync("INSERT INTO lists (id, title, created_at) VALUES ('l1', 'Feira', 'x')");
+    await db.runAsync(
+      "INSERT INTO items (id, list_id, name, unit, quantity, unit_price_cents, checked) VALUES ('i1', 'l1', 'Tomate', 'kg', 800, 1025, 1)",
+    );
+    await db.runAsync("INSERT INTO products (ean, name, unit, updated_at) VALUES ('1', 'Leite', 'un', 'x')");
+    await expect(
+      db.runAsync("INSERT INTO items (id, list_id, name, unit) VALUES ('x', 'l1', 'Arroz', 'pct')"),
+    ).rejects.toThrow();
+
+    expect(await migrate(db)).toBe(7);
+
+    expect(await db.getAllAsync("SELECT * FROM items")).toEqual([
+      expect.objectContaining({ name: "Tomate", unit: "kg", quantity: 800, unit_price_cents: 1025, checked: 1 }),
+    ]);
+    expect(await db.getAllAsync("SELECT * FROM products")).toHaveLength(1);
+    await db.runAsync("INSERT INTO items (id, list_id, name, unit, quantity) VALUES ('y', 'l1', 'Arroz', 'pct', 2)");
+    await db.runAsync("INSERT INTO products (ean, name, unit, updated_at) VALUES ('2', 'Arroz', 'pct', 'x')");
+    await expect(
+      db.runAsync("INSERT INTO items (id, list_id, name, unit) VALUES ('z', 'l1', 'Ruim', 'lt')"),
+    ).rejects.toThrow();
+    const idx = await db.getFirstAsync("SELECT name FROM sqlite_master WHERE name = 'idx_items_list'");
+    expect(idx).not.toBeNull();
+    db.close();
+  });
+});

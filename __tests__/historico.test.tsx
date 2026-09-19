@@ -14,6 +14,10 @@ describe("chart", () => {
     expect(formatPurchaseDate(iso(19))).toBe("19/09/2026");
     expect(formatShortDate(iso(5))).toBe("05/09");
   });
+  it("rótulo /pct para pacote", () => {
+    const [bar] = buildPriceChart([{ createdAt: iso(1), unit: "pct" as const, unitPriceCents: 499 }]);
+    expect(bar.valueLabel).toBe("R$ 4,99/pct");
+  });
   it("proporções, 1 ponto e limite 8", () => {
     const pts = [1, 2, 3].map((d, i) => ({ createdAt: iso(d), unit: "kg" as const, unitPriceCents: (i + 1) * 100 }));
     const bars = buildPriceChart(pts);
