@@ -1,6 +1,6 @@
 # Fase 5 — Modal Informar Preço
 
-**Branch:** `feature/modal-preco` · **Depende de:** fase 4 · **Paralela com:** fase 6
+**Status:** Concluída · **Branch:** `feature/modal-preco` · **Depende de:** fase 4 · **Paralela com:** fase 6
 **PRD:** 3.2 · RF-02 (máscara BRL), RF-04 (kg/un), RF-05 (edição rápida) · **Referência visual:** `docs/stitch/screens/modal-informar-preco.png`
 
 ## Escopo (arquivos)
@@ -24,3 +24,4 @@ Máscara e chips somam corretamente; `Zerar`; cálculo por peso; `Sair` não per
 - Abertura < 100 ms (medir e registrar no `docs/memory`).
 - Uso com uma mão: todos os alvos ≥ 48px, botões ao alcance do polegar.
 - `.\scripts\check.ps1` verde.
+
