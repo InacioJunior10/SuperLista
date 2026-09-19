@@ -1,6 +1,8 @@
 # Fase 4 — Tela Lista de Compras
 
 **Branch:** `feature/tela-lista` · **Depende de:** fases 1, 2, 3
+
+**Status: Concluída**
 **PRD:** 3.1 · RF-01, RF-03 · **Referência visual:** `docs/stitch/screens/lista-de-compras.png`
 
 ## Escopo (arquivos)

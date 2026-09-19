@@ -12,7 +12,8 @@ Cada fase é **uma branch + uma worktree** e termina com `.\scripts\check.ps1` v
 | 1 Domínio e totais | Concluída |
 | 2 Componentes base | Concluída |
 | 3 Shell do app e dados | Concluída (pendência: ícone/splash em PNG a partir do logo) |
-| 4 a 9 | Pendentes — próxima: **4 Tela Lista de Compras** |
+| 4 Tela Lista de Compras | Concluída (rota `/preco/[itemId]` e botão "+ Item" são placeholders das fases 5 e 6) |
+| 5 a 9 | Pendentes — próximas: **5 Modal Informar Preço** e **6 Meta e itens** (paralelas) |
 
 ## Ordem de execução
 
