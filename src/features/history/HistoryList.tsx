@@ -123,7 +123,7 @@ export function HistoryList({ getRepo, refreshToken = 0 }: HistoryListProps) {
           <Card style={styles.card}>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={`Compra de ${formatPurchaseDate(p.createdAt)}, ${p.title}`}
+              accessibilityLabel={`Compra de ${formatPurchaseDate(p.createdAt)}, ${p.market ?? p.title}`}
               accessibilityState={{ expanded: open }}
               onPress={() => void toggle(p.id)}
               style={styles.cardHead}
@@ -210,4 +210,5 @@ const styles = StyleSheet.create({
   bar: { width: sizes.iconLg, borderRadius: radius.sm },
   barValue: { ...typography.labelSm, color: colors.slate },
 });
+
 
