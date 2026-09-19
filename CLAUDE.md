@@ -43,6 +43,15 @@ Guia completo: `docs/WORKTREES.md`. Resumo das regras:
 - Servidores Expo em paralelo usam portas diferentes (`--port 8082`).
 - Ao delegar a um agent, informe branch, escopo de arquivos, requisito do PRD (RF-xx) e critério de pronto. Para subagents use `isolation: "worktree"`.
 
+## Memória de sessões (`docs/memory/`) — REGRA FIXA
+
+Ao final de **cada sessão de trabalho**, crie (ou atualize, se for a mesma sessão) um arquivo em `docs/memory/` descrevendo o que foi feito.
+
+- Nome: `AAAA-MM-DD-sessao-NN-<slug>.md` (NN sequencial; ex.: `2026-09-19-sessao-01-setup-stitch-sqlite.md`).
+- Conteúdo: objetivo, o que foi feito (por área), decisões, armadilhas encontradas, pendências/próximos passos, branch e commits.
+- Inclua o arquivo no commit da branch da tarefa. Não guarde segredos nem chaves.
+- No início de uma sessão, leia o arquivo mais recente de `docs/memory/` para retomar o contexto.
+
 ## Comandos (PowerShell)
 
 | Tarefa | Comando |
