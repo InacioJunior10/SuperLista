@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, View } from "react-native";
 
-import { colors, radius, spacing } from "@/theme";
+import { colors, hitTarget, radius, spacing } from "@/theme";
 
 export type SheetProps = { visible: boolean; onClose: () => void; children: ReactNode };
 
@@ -11,6 +11,7 @@ export function Sheet({ visible, onClose, children }: SheetProps) {
   return (
     <Modal transparent animationType="slide" onRequestClose={onClose}>
       <KeyboardAvoidingView
+        accessibilityViewIsModal
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={styles.root}
       >
@@ -28,7 +29,7 @@ export function Sheet({ visible, onClose, children }: SheetProps) {
 
 export const sheetStyles = StyleSheet.create({
   input: {
-    minHeight: 48,
+    minHeight: hitTarget,
     borderWidth: 1,
     borderColor: colors.strokeStrong,
     borderRadius: radius.base,

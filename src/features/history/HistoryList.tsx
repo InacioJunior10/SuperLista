@@ -113,6 +113,10 @@ export function HistoryList({ getRepo, refreshToken = 0 }: HistoryListProps) {
     <FlatList
       data={purchases}
       keyExtractor={(p) => p.id}
+      initialNumToRender={10}
+      maxToRenderPerBatch={10}
+      windowSize={7}
+      removeClippedSubviews
       contentContainerStyle={styles.list}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void onRefresh()} />}
       renderItem={({ item: p }) => {

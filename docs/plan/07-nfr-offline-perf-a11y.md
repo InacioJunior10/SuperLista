@@ -1,6 +1,7 @@
 # Fase 7 — Requisitos não funcionais: offline, desempenho e acessibilidade
 
 **Branch:** `feature/nfr` · **Depende de:** fases 5 e 6
+**Status: Concluída (POC)**
 **PRD:** NFR (usabilidade em loja, performance < 100 ms, offline first)
 
 ## Tarefas
@@ -15,3 +16,13 @@
 - Relatório de medições (tempos, fps) registrado em `docs/memory/`.
 - Checklist de acessibilidade preenchido.
 - `.\scripts\check.ps1` verde.
+
+## Status: Concluída (POC)
+Feito:
+- `@types/jest` alinhado a 29.5.14; `npx expo-doctor` 21/21.
+- Acessibilidade: auditoria de roles/labels (já conformes); `Sheet` com `accessibilityViewIsModal` e `hitTarget`; modal do scanner com `accessibilityViewIsModal`; ícone de código de barras oculto ao leitor de tela; teste `__tests__/a11y-audit.test.tsx` (Lista + sheets, Carrinho, Ajustes).
+- Desempenho: props de virtualização em SectionList (Lista) e FlatList (Histórico); `ShoppingItemRow` já é `React.memo`; teste `__tests__/perf-domain.test.ts` (200 e 1000 itens).
+- Offline: `__tests__/offline-guard.test.ts` (sem fetch/axios/XHR/WebSocket/URLs em src/ e app/).
+- Banco: `__tests__/db-migrations.test.ts` (contiguidade, criação do zero, upgrade v1 -> última com preço NULL -> 0). Mensagens de erro na UI já são fixas em pt-BR (sem `error.message`).
+
+Fica para o teste no emulador: abertura do modal de preço < 100 ms, fps com 200 itens, TalkBack (leitura das linhas), contraste real, fonte grande do sistema, modo avião.

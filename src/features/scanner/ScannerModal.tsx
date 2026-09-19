@@ -28,7 +28,7 @@ function ScannerContent({ onClose, onScanned }: Omit<ScannerModalProps, "visible
   return (
     <Modal visible animationType="slide" onRequestClose={onClose}>
       {granted ? (
-        <View style={styles.camera}>
+        <View style={styles.camera} accessibilityViewIsModal>
           <CameraView
             style={StyleSheet.absoluteFill}
             barcodeScannerSettings={{ barcodeTypes: [...BARCODE_TYPES] }}
