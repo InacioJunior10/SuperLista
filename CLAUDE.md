@@ -49,6 +49,8 @@ Guia completo: `docs/WORKTREES.md`. Resumo das regras:
 
 A ordem oficial de implementação do PRD está em `docs/plan/README.md` (fases 1–9, dependências, branches, escopo de arquivos, critérios de aceite e decisões em aberto). **Siga a ordem do plano**: antes de iniciar uma fase, confira as dependências e leia o arquivo da fase. Ao concluir, marque o status no README do plano e registre em `docs/memory/`.
 
+**Projeto é uma POC:** prefira sempre o caminho mais rápido e simples; lista única (sem várias listas); nada de features "opcionais" do plano nem dependências desnecessárias. O usuário testa no emulador só no final e abre issues para correções.
+
 ## Memória de sessões (`docs/memory/`) — REGRA FIXA
 
 Ao final de **cada sessão de trabalho**, crie (ou atualize, se for a mesma sessão) um arquivo em `docs/memory/` descrevendo o que foi feito.
