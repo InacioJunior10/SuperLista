@@ -10,7 +10,7 @@ export default function AjustesScreen() {
   const { reload } = useShoppingList();
 
   const confirmClear = () => {
-    Alert.alert("Apagar todos os dados?", "Esta ação não pode ser desfeita.", [
+    Alert.alert("Apagar todos os dados?", "Esta ação não pode ser desfeita. A lista inicial será recriada.", [
       { text: "Cancelar", style: "cancel" },
       {
         text: "Apagar",

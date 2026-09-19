@@ -2,7 +2,7 @@ import { render, screen, userEvent } from "@testing-library/react-native";
 
 import { migrate } from "@/db/migrations";
 import { createListsRepository, type ListsRepository } from "@/db/repository";
-import { seedIfEmpty } from "@/db/seed";
+import { ensureInitialList } from "@/db/seed";
 import { ListsProvider } from "@/features/lists/ListsProvider";
 
 import Ajustes from "../app/(tabs)/ajustes";
@@ -23,7 +23,7 @@ beforeEach(async () => {
   db = createTestDb();
   await migrate(db);
   repo = createListsRepository(db);
-  await seedIfEmpty(repo);
+  await ensureInitialList(repo);
   const list = (await repo.listLists())[0];
   await repo.updateItem(list.items[0].id, { checked: true }); // ao menos um item no Carrinho
 });

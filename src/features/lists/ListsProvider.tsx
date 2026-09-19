@@ -11,6 +11,7 @@ import {
 } from "react";
 
 import type { ItemPatch, ListsRepository, NewItem } from "@/db/repository";
+import { ensureInitialList } from "@/db/seed";
 import type { ShoppingList } from "@/types/list";
 
 import { budgetStatus, type BudgetStatus } from "./budget";
@@ -98,7 +99,10 @@ export function ListsProvider({ children, repository }: ListsProviderProps) {
         const wantedId = requestedId ?? (await readActiveId());
         let list = wantedId ? await repo.getList(wantedId) : null;
         list ??= (await repo.listLists())[0] ?? null;
-        list ??= await repo.createList({ title: DEFAULT_LIST_TITLE });
+        if (!list) {
+          await ensureInitialList(repo);
+          list = (await repo.listLists())[0] ?? (await repo.createList({ title: DEFAULT_LIST_TITLE }));
+        }
         await writeActiveId(list.id);
         commit({ list, loading: false });
       } catch (e) {

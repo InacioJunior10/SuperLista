@@ -9,9 +9,13 @@ import {
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
+import { Appearance } from "react-native";
 
 import { DatabaseGate } from "@/features/lists/DatabaseGate";
 import { colors } from "@/theme";
+
+// Somente tema claro: ignora o modo escuro do sistema (diálogos, teclado e componentes nativos).
+Appearance.setColorScheme("light");
 
 SplashScreen.preventAutoHideAsync();
 
