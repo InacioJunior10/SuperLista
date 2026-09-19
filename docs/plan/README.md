@@ -11,9 +11,12 @@ Cada fase é **uma branch + uma worktree** e termina com `.\scripts\check.ps1` v
 | 0 Fundação | Concluída |
 | 1 Domínio e totais | Concluída |
 | 2 Componentes base | Concluída |
-| 3 Shell do app e dados | Concluída (pendência: ícone/splash em PNG a partir do logo) |
-| 4 Tela Lista de Compras | Concluída (rota `/preco/[itemId]` e botão "+ Item" são placeholders das fases 5 e 6) |
-| 5 a 9 | Pendentes — próximas: **5 Modal Informar Preço** e **6 Meta e itens** (paralelas) |
+| 3 Shell do app e dados | Concluída (ícone/splash gerados por `npm run icons`) |
+| 4 Tela Lista de Compras | Concluída |
+| 5 Modal Informar Preço | Concluída |
+| 6 Meta e itens | Concluída (sem desfazer via snackbar nem ordenar pendentes: fora da POC) |
+| 8.4 Ajustes | Concluída (sobre o app + limpar dados) |
+| 7, 8.1 a 8.3, 9 | Pendentes — próximas: **8.1 Checkout** e **8.3 Scanner** (paralelas), depois **8.2 Histórico**, **7 NFR** e **9 Release** |
 
 ## Ordem de execução
 
