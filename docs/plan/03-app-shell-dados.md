@@ -7,7 +7,7 @@
 `app/_layout.tsx`, `app/(tabs)/`, `src/hooks/`, `src/features/lists/` (hooks/estado, não lógica pura), `package.json` só se necessário. Skill: `rn-screen`.
 
 ## Tarefas
-1. **Decisão de plataforma** (ver README do plano): web com `expo-sqlite` ou apenas mobile. Se web for mantido, configurar Metro/wasm; senão, ajustar README (`w`) e `app.json`.
+1. **Plataforma (decidido): somente mobile**, dados só no dispositivo. Não configurar web nem Metro/wasm; testar em Android (emulador ou Expo Go).
 2. **Navegação por abas** `app/(tabs)/_layout.tsx` com 4 abas: **Lista** (ativa), **Histórico**, **Carrinho**, **Ajustes** — ícones e rótulos do PRD, cor ativa `#00A86B`. Histórico/Carrinho/Ajustes com tela placeholder ("Em breve").
 3. **Inicialização do banco** no layout raiz: `getListsRepository()` antes de esconder a splash; tela de erro com "Tentar novamente" se falhar.
 4. **Provider/hook de dados**: `ListsProvider` + `useShoppingList(listId)` expondo lista, ações (`toggleItem`, `setItemPrice`, `addItem`, `removeItem`, `updateBudget`) e recarga; estado atualizado de forma otimista e persistido no SQLite.

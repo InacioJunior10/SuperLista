@@ -13,8 +13,8 @@
 - Escopo: `app/(tabs)/historico.tsx`, `src/features/history/`. Depende de 8.1 para ter dados reais (usar seed enquanto isso).
 
 ## 8.3 Scanner de código de barras (EAN) — `feature/scanner`
-- Leitura pela câmera (`expo-camera`), consulta de produto/preço; preencher nome/categoria ao adicionar item e sugerir último preço pago (do histórico).
-- Definir fonte de dados EAN (ex.: Open Food Facts) — exige rede; manter **fallback offline** (cadastro manual).
+- Leitura pela câmera (`expo-camera`); preencher nome/categoria ao adicionar item e sugerir último preço pago (do histórico).
+- **Sem consulta online** (decidido: sem APIs): catálogo **local** — tabela `products` (EAN → nome, categoria, unidade, último preço), alimentada quando o usuário cadastra um produto após escanear; código desconhecido abre o cadastro manual. (Nova migração + repositório em `src/db`.)
 - Escopo: `src/features/scanner/`, permissão de câmera em `app.json`.
 
 ## 8.4 Ajustes — parte de `feature/checkout` ou branch própria `feature/ajustes`
