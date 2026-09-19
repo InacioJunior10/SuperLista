@@ -45,7 +45,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test": "jest",
-    "icons": "node scripts/generate-icons.mjs"
+    "icons": "node scripts/generate-icons.mjs",
+    "hooks": "pwsh -NoProfile -File scripts/install-hooks.ps1"
   },
   "private": true,
   "jest": {

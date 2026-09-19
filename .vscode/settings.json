@@ -1,0 +1,12 @@
+{
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "text": "Gere a mensagem de commit em português do Brasil, no padrão Conventional Commits (semantic git): 'tipo(escopo): descrição'. Tipos: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert. Descrição no presente do indicativo, em minúsculas, sem ponto final, primeira linha com no máximo 72 caracteres. Escopos usuais: db, lists, components, checkout, history, scanner, settings, app, theme, utils, docs, scripts, hooks. Quando útil, adicione um corpo curto em tópicos explicando o porquê da mudança. Não traduza nomes de arquivos, funções ou termos técnicos."
+    }
+  ],
+  "git.inputValidation": "always",
+  "git.inputValidationSubjectLength": 72,
+  "git.inputValidationLength": 100,
+  "git.useEditorAsCommitInput": false,
+  "terminal.integrated.defaultProfile.windows": "PowerShell"
+}
