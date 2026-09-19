@@ -23,7 +23,13 @@
     "scheme": "superlista",
     "plugins": [
       "expo-router",
-      "expo-sqlite"
+      "expo-sqlite",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Permitir que o SuperLista use a câmera para ler códigos de barras dos produtos."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

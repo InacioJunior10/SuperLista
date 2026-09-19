@@ -36,6 +36,19 @@ export const MIGRATIONS: readonly Migration[] = [
     version: 2,
     sql: `UPDATE items SET unit_price_cents = 0 WHERE unit_price_cents IS NULL;`,
   },
+  {
+    // Catálogo local de produtos por código de barras (EAN).
+    version: 4,
+    sql: `
+      CREATE TABLE products (
+        ean        TEXT PRIMARY KEY NOT NULL,
+        name       TEXT NOT NULL,
+        category   TEXT NOT NULL DEFAULT 'outros',
+        unit       TEXT NOT NULL DEFAULT 'un' CHECK (unit IN ('kg', 'un')),
+        updated_at TEXT NOT NULL
+      );
+    `,
+  },
 ];
 
 /** Aplica as migrações pendentes usando PRAGMA user_version. Idempotente. */

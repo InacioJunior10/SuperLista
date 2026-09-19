@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 import { Button, Chip } from "@/components";
 import type { NewItem } from "@/db/repository";
 import { CATEGORIES } from "@/features/lists/categories";
 import { suggestCategory } from "@/features/lists/suggestCategory";
-import { colors, spacing, typography } from "@/theme";
+import { lookupProduct, rememberProduct } from "@/features/scanner/lookup";
+import { ScannerModal } from "@/features/scanner/ScannerModal";
+import { colors, hitTarget, radius, spacing, typography } from "@/theme";
 import type { Category, ShoppingItem, Unit } from "@/types/list";
 
 import { Sheet, sheetStyles } from "./Sheet";
@@ -39,14 +42,47 @@ function Form({ item, onClose, onSubmit }: Omit<AddItemSheetProps, "visible">) {
     setName(text);
     if (!touched) setCategory(suggestCategory(text) ?? "outros");
   };
-  const submit = () =>
-    onSubmit({ name: name.trim(), category, unit, quantity: parseQuantity(qty, unit) });
+  const [scanning, setScanning] = useState(false);
+  const [ean, setEan] = useState<string | null>(null);
+  const [isNew, setIsNew] = useState(false);
+
+  const onScanned = async (code: string) => {
+    setScanning(false);
+    const found = await lookupProduct(code);
+    setEan(code);
+    setIsNew(!found);
+    if (!found) return;
+    setName(found.name);
+    setCategory(CATEGORIES.some((c) => c.key === found.category) ? (found.category as Category) : "outros");
+    setUnit(found.unit);
+    setQty("1");
+    setTouched(true);
+  };
+
+  const submit = () => {
+    const trimmed = name.trim();
+    if (ean) void rememberProduct({ ean, name: trimmed, category, unit });
+    onSubmit({ name: trimmed, category, unit, quantity: parseQuantity(qty, unit) });
+  };
 
   return (
     <>
       <Text accessibilityRole="header" style={styles.title}>
         {item ? "Editar item" : "Novo item"}
       </Text>
+      {!item && (
+        <Pressable
+          onPress={() => setScanning(true)}
+          accessibilityRole="button"
+          accessibilityLabel="Escanear código"
+          style={styles.scan}
+        >
+          <MaterialCommunityIcons name="barcode-scan" size={24} color={colors.primary} />
+          <Text style={styles.scanText}>Escanear código</Text>
+        </Pressable>
+      )}
+      {isNew && <Text style={styles.notice}>Produto novo: preencha o nome</Text>}
+      <ScannerModal visible={scanning} onClose={() => setScanning(false)} onScanned={onScanned} />
       <TextInput
         value={name}
         onChangeText={onName}
@@ -118,4 +154,16 @@ const styles = StyleSheet.create({
   label: { ...typography.labelLg, color: colors.slateMuted },
   row: { flexDirection: "row", flexWrap: "wrap", gap: spacing.sm },
   flex: { flex: 1 },
+  scan: {
+    minHeight: hitTarget,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    borderRadius: radius.base,
+  },
+  scanText: { ...typography.labelLg, color: colors.primary },
+  notice: { ...typography.labelLg, color: colors.slateMuted },
 });
